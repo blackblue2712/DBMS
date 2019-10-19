@@ -1,0 +1,121 @@
+
+#mainbar .container{
+    margin: 0 !important;
+}
+
+.post-title {
+    
+}
+
+.post-title label, .post-editor label {
+    color: #0C0D0E;
+    font-family: inherit;
+    font-size: 1.15384615rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+.post-title label .s-desscription,  .post-editor label .s-desscription {
+    margin: 0;
+    padding: 0;
+    margin-top: 4px;
+    margin-bottom: 0;
+    font-weight: normal;
+    color: #3b4045;
+    font-size: 12px;
+}
+
+#mainbar .s-input {
+    padding: 0.6em 0.7em;
+}
+
+.s-sidebarwidget--header__FAFAFB { 
+    background-color: #FAFAFB !important;
+}
+
+.wrap-button-guild {
+    border-bottom: 1px solid #e4e6e8;
+    box-sizing: unset;
+    padding: 0 18px;
+    margin-left: -20px;
+}
+
+.button-guild {
+    padding: 0;
+    border: none;
+    outline: none;
+    font: inherit;
+    color: inherit;
+    background: none;
+    box-shadow: none;
+    cursor: pointer;
+}
+
+.wrap-button-guild:last-child {
+    border-bottom: none !important;
+    /* margin-bottom: -16px; */
+
+}
+
+.s-expandable--content {
+    padding-left: 27px !important;
+    display: none;
+}
+.s-expandable {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%) !important;
+}
+.s-expanded{
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0) !important;
+}
+
+.is-expanded {
+    animation: popup .2s linear;
+    transition: clip-path 0s 100ms,-webkit-clip-path 0s 100ms;
+}
+.is-expandable {
+    animation: popdown .2s linear;
+    transition: clip-path 0s 100ms,-webkit-clip-path 0s 100ms;
+}
+
+@keyframes popup {
+    0% {
+        clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+        height: 0;
+    }
+    100% {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        height: 93px;
+    }
+}
+
+@keyframes popdown {
+    0% {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        height: 93px;
+    }
+    100% {
+        clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+        height: 0;
+    }
+}
+
+.tags-editor {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    width: 100%;
+    cursor: text;
+    background-color: #FFF;
+    position: relative;
+    overflow: hidden;
+    white-space: normal;
+    height: auto !important;
+    min-height: 37px !important;
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+}
+
+.tags-included {
+    top: 50%;
+    transform: translate(0, -38%);
+    left: 10px;
+
+}

@@ -1,0 +1,18 @@
+
+
+.s-input-icon {
+    position: absolute;
+    top: 50%;
+    left: .7em;
+    margin-top: -9px;
+    cursor: pointer;
+}
+
+.svg-icon {
+    fill: #bbc0c4;
+    transition: .1s;
+}
+.svg-icon:hover {
+    fill: #3B4045;
+}
+

@@ -1,0 +1,82 @@
+.image-card {
+    max-width: 240px;
+    margin-bottom: 12px;
+    padding: 6px;
+    box-shadow: 0 4px 8px rgba(59,64,69,0.2) !important;
+    box-sizing: content-box;
+    float: left;
+    overflow: hidden;
+    
+}
+
+.image-url {
+    max-width: 240px;
+    word-break: break-all;
+    
+    margin-top: 4px;
+    font-size: 13px;
+    font-weight: 350;
+    transition: .4s;
+}
+
+.grid-column {
+    max-width: 240px;
+    float: left;
+    margin-right: 12px;;
+}
+
+.image-card img {
+    -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none; /* Safari */
+        -khtml-user-select: none; /* Konqueror HTML */
+            -moz-user-select: none; /* Old versions of Firefox */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+                user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome, Opera and Firefox */
+}
+
+.image-card img.single-image, .image-card .image-url{
+    transition: .4s
+}
+.image-card:hover img.single-image {
+    transform: scale(1.2, 1.2);
+    opacity: .8;
+}
+.image-card:hover .btn-copy, .image-card:hover .btn-close {
+    display: block !important;
+}
+.image-card:hover .image-url {
+    font-weight: 400;
+    transform: translateY(-50px);
+    color: white;
+    background-color: black;
+    opacity: .5;
+    box-sizing: border-box;
+    padding: 4px;
+}
+.choose-images {
+    
+    text-align: center;
+    
+}
+
+@media screen and (max-width: 1292px) {
+    .grid-column:nth-child(3) {
+        clear: left;
+    }
+    .grid-column {
+        max-width: 320px;
+    }
+    .grid-column:nth-child(even) {
+        margin-left: 24px;
+    }
+    .image-card {
+        max-width: 320px;
+    }
+    .image-card img.single-image {
+        width: 320px;
+    }
+    .image-url {
+        max-width: 320px;
+    }
+}

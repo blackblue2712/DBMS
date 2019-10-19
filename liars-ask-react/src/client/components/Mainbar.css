@@ -1,0 +1,4 @@
+#mainbar {
+    width: calc(100% - 300px - 24px);
+    float: left;
+}

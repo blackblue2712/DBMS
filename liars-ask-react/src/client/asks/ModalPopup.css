@@ -1,0 +1,77 @@
+.s-modal {
+    top :0;
+    left: 0;
+    z-index: 9999998;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(12,13,14,0.5);
+}
+
+.s-modal--dialog {
+    top: 50%;
+    left: 50%;
+    z-index: 9999999;
+    transform: translate(-50%, -50%);
+    overflow-y: auto;
+    max-width: 450px !important;
+    max-height: 100%;
+    padding: 24px;
+    border-radius: 7px;
+    background-color: #FFF;
+    opacity: 1;
+    box-shadow: 0 4px 12px rgba(36,39,41,0.2);
+    
+    animation: showModal .3s linear;
+    transition: opacity 200ms cubic-bezier(.165, .84, .44, 1) 0s,z-index 0s 100ms,visibility 0s 100ms,transform 100ms cubic-bezier(.165, .84, .44, 1) 0s,transform 100ms cubic-bezier(.165, .84, .44, 1) 0s;
+
+}
+
+.s-modal--dialog img {
+    bottom: 0;
+    right: 20px;
+}
+
+.s-modal--dialog h1{
+    font-weight: 400;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.s-modal--close {
+    top: 20px;
+    right: 10px;
+}
+.s-modal--body p {
+    font-size: 14px;
+    font-weight: 400
+}
+.s-modal--body span {
+    font-size: 14px;
+    font-weight: 450
+}
+
+@keyframes showModal {
+    0% {
+        /* clip-path: polygon(0 50%, 100% 50%, 100% 50%, 0 50%); */
+        clip-path: polygon(0 30%, 100% 30%, 100% 70%, 0 70%);
+    }
+    80% {
+        clip-path: polygon(0 40%, 100% 40%, 100% 60%, 0% 60%);
+    }
+    100% {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+}
+
+
+/* @keyframes showModal2 {
+    0% {
+        transform: scale(1 ,1);
+    }
+    1% {
+        transform: scale(0 ,0);
+    }
+    100% {
+        transform: scale(1 ,1);
+    }
+} */

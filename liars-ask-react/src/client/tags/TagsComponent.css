@@ -1,0 +1,42 @@
+#tags-list {
+
+}
+#tags-list .tags-cell {
+    border-bottom: 1px dotted #e4e6e8;
+    padding: 8px 4px 12px 4px;
+}
+#tags-browser {
+    width: 100%;
+    display: grid;
+    grid-gap: 8px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+.item-multiplier {
+    margin-right: 4px;
+    color: #848d95;
+}
+
+.item-multiplier-count {
+    font-size: 11px;
+    color: #6a737c;
+}
+
+#tags-list .excerpt {
+    box-sizing: content-box;
+    font-size: 12px;
+    height: 39px;
+    line-height: 14px;
+    overflow: hidden;
+    margin-bottom: 4px;
+    padding-top: 4px;
+    padding-right: 8px;
+    color: #848d95;
+}
+
+#tags-list .stats-row {
+    font-size: 11px;
+    color: #3b4045;
+    padding-top: 4px;
+    padding-right: 8px;
+}

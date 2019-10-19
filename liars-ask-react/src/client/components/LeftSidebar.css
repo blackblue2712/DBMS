@@ -1,0 +1,56 @@
+
+  
+
+.left-sidebar {
+    width: 164px;
+    height: calc(100vh - 50px);
+    padding-top: 24px;
+    z-index: 1000;
+    box-shadow: 0 0 0 rgba(12,13,14,0.05);
+    transition: box-shadow ease-in-out .1s,transform ease-in-out .1s;
+}
+
+.nav-links {
+    margin-bottom: 12px;
+}
+
+.nav-links--link {
+    display: block;
+    padding: 4px;
+    padding-left: 30px;
+    line-height: 1.8;
+    font-size: 13px;
+    color: var(--leftside-color) !important;
+}
+.nav-links--link:hover {
+    color: #0C0D0E;
+}
+
+.nav-links .youarehere .nav-links--link{
+    font-weight: bold;
+    background: rgba(12,13,14,0.05);
+    color: #0C0D0E;
+    border-right: 3px solid #F48024;
+    padding-left: 8px;
+}
+
+.-link__with-icon {
+    padding: 8px 6px 8px 4px;
+
+}
+.-link--chanel-name {
+    margin-left: 4px;
+}
+
+
+.-link__with-icon-custom svg path {
+    fill: none;
+    stroke: #000;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: 0.2s;
+}
+
+.nav-links--link:hover .svg-4 path {
+    d: path("M2,5 C2,2 8,2 8,5");
+}
