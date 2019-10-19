@@ -15,7 +15,7 @@ class AnswerItem extends React.Component {
     }
 
     componentDidMount() {
-        this.setState( {count: this.props.data.votes.length} );
+        // this.setState( {count: this.props.data.votes.length} );
     }
 
     handleAnswerVoteUp = () => {
@@ -32,10 +32,11 @@ class AnswerItem extends React.Component {
     render() {
         const { count, active } = this.state;
         const ans = this.props.data;
-        const isActive = this.props.data.votes.indexOf(isAuthenticated().user._id) !== -1 ? "active" : "";
+        // const isActive = this.props.data.votes.indexOf(isAuthenticated().user._id) !== -1 ? "active" : "";
+        const isActive = false;
         return (
             <div className="answer mt16 mb16">
-                <div className="post-layout d-flex w-100">
+                <div className="post-layout d-flex">
                     <div className="votecell post-layout--left mr24">
                         <div className="js-voting">
                             <button
@@ -50,17 +51,17 @@ class AnswerItem extends React.Component {
                             </button>
                         </div>
                     </div>
-                    <div className="votecell post-layout--right w-100">
+                    <div className="votecell post-layout--right">
                         <div className="post-text md-content">
                             <ReactMarkdown source={ans.body} renderers={{ code: CodeBlock }} />
                         </div>
                         <div className="d-flex justify-content-end">
                             <UserInfo
-                                username={ans.owner.email}
+                                username={ans.email}
                                 // userLocation="Bratislava, Slovakia"
-                                userImage={ans.owner.photo}
-                                userFullname={ans.owner.fullname}
-                                userId={ans.owner._id}
+                                userImage={ans.photo}
+                                userFullname={ans.fullname}
+                                userId={ans.owner}
                             />
                         </div>
                     

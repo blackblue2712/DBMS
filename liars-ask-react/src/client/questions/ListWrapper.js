@@ -13,7 +13,7 @@ const ListWrapper = props => {
             <div className="mini-list">
                 {
                     questions && questions.map( (ques, i) => {
-                        return <ListItem key={i} title={ques.title} body={ques.body} tags={ques.anonymousTags} id={ques._id} answers={ques.answers.length} /> 
+                        return <ListItem key={i} title={ques.title} body={ques.body} tags={ques.anonymousTags} id={ques.id} answers={0} /> 
                     })
                 }
             </div>

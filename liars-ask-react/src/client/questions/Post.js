@@ -12,7 +12,7 @@ class Post extends Component {
     }
 
     shouldComponentUpdate(prevProps, prevState) {
-        return prevProps.data._id !== this.state.ques._id
+        return prevProps.data.id !== this.state.ques.id
     }
 
     componentDidUpdate() {
@@ -21,6 +21,7 @@ class Post extends Component {
 
     render() {
         let { ques } = this.state;
+        console.log(ques)
         return (
             <div className="post-layout d-flex">
                 <div className="votecell post-layout--left mr24">
@@ -39,7 +40,7 @@ class Post extends Component {
                         <ReactMarkdown source={ques.body} renderers={{ code: CodeBlock }} />
                     </div>
                     {
-                        ques.anonymousTags && ques.anonymousTags.map( (tag,i) => {
+                        ques.anonymousTags && JSON.parse(ques.anonymousTags).map( (tag,i) => {
                             return <Tags key={i} name={tag}/>
                         })
                     }

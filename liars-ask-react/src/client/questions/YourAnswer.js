@@ -19,11 +19,13 @@ class YourAnswer extends React.Component {
         if(editor && editor.value.length > 0) {
             let body = editor.value;
             let userId = isAuthenticated().user._id;
+            let {email, photo, fullname} = isAuthenticated().user;
             let token  = isAuthenticated().token;
             let quesId = this.props.match.params.quesId;
 
-            postAnswer( {body, userId, quesId}, token )
+            postAnswer( {body, userId, quesId, email, photo, fullname}, token )
             .then( res => {
+                console.log("***",res)
                 this.setState( {message: res.message} );
                 if(res.message === "Your answer added") {
                     editor.value = "";
@@ -31,12 +33,12 @@ class YourAnswer extends React.Component {
                     let photo = isAuthenticated().user.photo;
                     this.props.addAnswer({
                         body,
-                        votes: [],
+                        votes: '[]',
                         owner: {
                             _id: userId,
                             email,
                             photo,
-                            votes: []
+                            votes: '[]'
                         }
                     })
                 }

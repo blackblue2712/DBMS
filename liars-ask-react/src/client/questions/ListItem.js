@@ -42,7 +42,7 @@ class ListItem extends Component {
                         {body.length > 200 ? body.slice(0, 200) + "..." : body}
                     </div>
                     {
-                        tags && tags.map( (t, i) => {
+                        tags && JSON.parse(tags).map( (t, i) => {
                             return <Tags key={i} name={t}/>
                         })
                     }
