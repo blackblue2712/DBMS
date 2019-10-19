@@ -28,26 +28,33 @@ module.exports.getQuestions = (req, res) => {
 // }
 
 
-// module.exports.requestRelatedQuestionId = (req, res, next, id) => {
-//     Ques
-//         .findById(id)
-//         .populate({
-//             path: "answers",
-//             populate: {
-//                 path: "owner",
-//                 select: "email photo _id fullname"
-//             }
-//         })
-//         .exec( (err, ques) => {
-//             if(err || !ques) return res.status(200).json( {message: "Error occur (get single question)"} );
-//             req.quesInfo = ques;
-//             next();
-//         })
-// }
+module.exports.requestRelatedQuestionId = (req, res, next, id) => {
+    // Ques
+    //     .findById(id)
+    //     .populate({
+    //         path: "answers",
+    //         populate: {
+    //             path: "owner",
+    //             select: "email photo _id fullname"
+    //         }
+    //     })
+    //     .exec( (err, ques) => {
+    //         if(err || !ques) return res.status(200).json( {message: "Error occur (get single question)"} );
+    //         req.quesInfo = ques;
+    //         next();
+    //     })
 
-// module.exports.getSigleQuestion = (req, res) => {
-//     return res.status(200).json(req.quesInfo);
-// }
+    let query = `SELECT * FROM questions WHERE id = ${id}`;
+    con.query(query, (err, ques) => {
+        if(err || !ques) return res.status(200).json( {message: "Error occur (get single question)"} );
+        req.quesInfo = ques[0];
+        next();
+    })
+}
+
+module.exports.getSigleQuestion = (req, res) => {
+    return res.status(200).json(req.quesInfo);
+}
 
 // module.exports.postAnswer = async (req, res, next) => {
 //     console.log(req.body.userId);
