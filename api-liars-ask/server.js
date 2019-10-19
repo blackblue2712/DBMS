@@ -30,6 +30,7 @@ con.connect(function(err) {
 // Routes
 const userRoute = require("./routes/users");
 const authRoute = require("./routes/auth");
+const askRoute = require("./routes/asks");
 // const galleryRoute = require("./routes/galleries");
 
 
@@ -43,6 +44,7 @@ app.use(express.static('public'));
 
 app.use("/users", userRoute);
 app.use("/auth", authRoute);
+app.use("/asks", askRoute);
 // app.use("/galleries", galleryRoute);
 
 
