@@ -1,9 +1,8 @@
-const Blog = require("../models/blogs");
-
+const { addslashes } = require("../helper/helper");
 module.exports.postWriteBlog = (req, res) => {
     console.log(req.body);
     let { title, body, tagsnameArray, owner } = req.body;
-    let query = `INSERT INTO blogs (title, body, anonymousTags, owner) VALUES ('${title}', '${body}', '${JSON.stringify(tagsnameArray)}', '${owner}')`;
+    let query = `INSERT INTO blogs (title, body, anonymousTags, owner) VALUES ('${addslashes(title)}', '${addslashes(body)}', '${JSON.stringify(addslashes(tagsnameArray))}', '${owner}')`;
     con.query(query, (err, result) => {
         if(err) return res.status(400).json( {message: "Error occur (wirte blog)"} );
         return res.status(200).json( {message: "Done"} )
@@ -37,7 +36,6 @@ module.exports.getYourBlogs = (req, res) => {
 
 module.exports.requestRelatedBlogId = async (req, res, next, id) => {
     let query = `SELECT * FROM blogs WHERE id = ${id}`;
-    console.log(query);
     con.query(query, (err, blog) => {
         if(err) return res.status(400).json( {message: "Error occur (get single blog)"} );
         req.blogInfo = blog[0];
@@ -46,18 +44,21 @@ module.exports.requestRelatedBlogId = async (req, res, next, id) => {
 }
 
 module.exports.getSingleBlog = (req, res) => {
-    
     return res.status(200).json(req.blogInfo);
 }
 
 module.exports.putEditBlog = (req, res) => {
     let blog = req.blogInfo;
     let { title, body, tagsnameArray } = req.body;
-    if(body) blog.body = body;
-    blog.title = title;
-    blog.anonymousTags = tagsnameArray;
+    let query = "";
+    
+    if(body) {
+        query = `UPDATE blogs SET title = '${addslashes(title)}', anonymousTags = '${JSON.stringify(tagsnameArray)}', body = '${addslashes(body)}' WHERE id = ${blog.id}`;
+    } else {
+        query = `UPDATE blogs SET title = '${addslashes(title)}', anonymousTags = '${JSON.stringify(tagsnameArray)}' WHERE id = ${blog.id}`;
+    }
 
-    blog.save( (err, result) => {
+    con.query(query, (err, result) => {
         if(err) return res.status(400).json( {message: "Error occur (edit blog)"} )
         return res.status(200).json( {message: "Done"} );
     })

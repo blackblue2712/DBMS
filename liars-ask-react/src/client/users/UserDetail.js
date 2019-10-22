@@ -30,13 +30,13 @@ class UserDetail extends React.Component {
             if(Number(userInfo.message) === 404) {
                 this.props.history.push("/404");
             }
-            // // get your questions
+            // get your questions
             // let yourQuestions = await getYourQuestions(userId);
-            // // get your blogs
-            // let yourBlogs = await getYourBlogs(userId);
+            // get your blogs
+            let yourBlogs = await getYourBlogs(userId);
 
             // this.setState( {userPayload: userInfo, questions: yourQuestions, blogs: yourBlogs} );
-            this.setState( {userPayload: userInfo} );
+            this.setState( {userPayload: userInfo, blogs: yourBlogs} );
         } catch (err) {
             console.log(err);
         }
@@ -171,7 +171,7 @@ class UserDetail extends React.Component {
                                                 <p key={i}>
                                                     <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="#626262" d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10s10-4.477 10-10S17.523 2 12 2zm1 17h-2v-2h2v2zm2.067-7.746l-.895.918C13.448 12.895 13 13.5 13 15h-2v-.5c0-1.104.448-2.104 1.171-2.828l1.243-1.258A2 2 0 1 0 10 9H8a4 4 0 0 1 8 0c0 .88-.357 1.677-.933 2.254z"/></svg>
                                                     &nbsp;
-                                                    <Link className="text-54b8ff" to={`/questions/ask/edit/${q._id}`}>{q.title}</Link>
+                                                    <Link className="text-54b8ff" to={`/questions/ask/edit/${q.id}`}>{q.title}</Link>
                                                 </p>
                                             )
                                         })
@@ -189,7 +189,7 @@ class UserDetail extends React.Component {
                                         blogs.map( (blog, i) => {
                                             return (
                                                 <p key={i}>
-                                                    <Link className="text-54b8ff" to={`/blogs/edit/${blog._id}`}>{blog.title}</Link>
+                                                    <Link className="text-54b8ff" to={`/blogs/edit/${blog.id}`}>{blog.title}</Link>
                                                 </p>
                                             )
                                         })

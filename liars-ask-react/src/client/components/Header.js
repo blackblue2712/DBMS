@@ -27,6 +27,7 @@ class Header extends Component {
         if(isAuthenticated()) {
             this.setState( {uid: isAuthenticated().user._id, photo: isAuthenticated().user.photo} );
         }
+        console.log(isAuthenticated())
     }
 
     handleToggleMenu = () => {

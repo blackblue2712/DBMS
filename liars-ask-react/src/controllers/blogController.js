@@ -96,6 +96,6 @@ export const putEditBlog = (blogInfo, token) => {
         return res.json();
     })
     .catch( err => {
-        console.log("ERROR POST ANNOUNCEMENT");
+        return {message: "ERROR EDIT BLOG"}
     })
 }
