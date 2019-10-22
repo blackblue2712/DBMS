@@ -17,7 +17,7 @@ const SingleBlog = (props) => {
 
     }, [blog._id])
 
-    // console.log(blog)
+    console.log(blog)
     return (
         <div id="content">
             <div id="mainbar">
@@ -33,7 +33,7 @@ const SingleBlog = (props) => {
                     <ReactMarkdown source={blog.body} renderers={{ code: CodeBlock }} />
                     
                     {
-                        blog.anonymousTags && blog.anonymousTags.map( (tag,i) => {
+                        blog.anonymousTags && JSON.parse(blog.anonymousTags).map( (tag,i) => {
                             return <Tags key={i} name={tag}/>
                         })
                     }

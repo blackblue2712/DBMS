@@ -11,6 +11,7 @@ class ListItem extends Component {
 
     render() {
         const { title, body, tags, id } = this.props;
+        console.log(tags);
         return (
             <div className={`item-list narrow d-flex`}>
                 <div className="cp d-flex">
@@ -38,12 +39,12 @@ class ListItem extends Component {
                         <Link to={`/blogs/${id}`} className="hyper-link">{title}</Link>
                     </h3>
                     <div className="list-body--text mb4" style={{}}>
-                        <ReactMarkdown
-                            source={body.length > 100 ? body.slice(0, 100) + "..." : body}
-                        />
+                        {
+                            body.length > 100 ? body.slice(0, 100) + "..." : body
+                        }
                     </div>
                     {
-                        tags && tags.map( (t, i) => {
+                        tags && JSON.parse(tags).map( (t, i) => {
                             return <Tags key={i} name={t}/>
                         })
                     }

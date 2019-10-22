@@ -15,6 +15,7 @@ class Blogs extends React.Component {
     componentDidMount() {
         getAllBlogs()
         .then( res => {
+            console.log(res)
             this.setState( {blogs: res} )
         })
     }

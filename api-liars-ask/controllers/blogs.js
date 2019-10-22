@@ -12,35 +12,41 @@ module.exports.postWriteBlog = (req, res) => {
 
 module.exports.getBlogs = (req, res) => {
     // Missing limit query in req.query.limit;
-    let query = "SELECT id, title, owner FROM blogs";
+    let query = "SELECT * FROM blogs";
     con.query(query, (err, blogs) => {
         if(err) return res.status(400).json( {message: "Error occur (get blogs) " + err} );
         return res.status(200).json( blogs );
     })
 }
 module.exports.getAllBlogs = (req, res) => {
-    let query = "SELECT id, title, owner FROM blogs";
+    let query = "SELECT * FROM blogs";
     con.query(query, (err, blogs) => {
         if(err) return res.status(400).json( {message: "Error occur (get all blogs) " + err} );
         return res.status(200).json( blogs );
     });
 }
+
 module.exports.getYourBlogs = (req, res) => {
-    Blog.find({owner: req.query.userId}, "title _id", (err, blogs) => {
+    let userId = req.query.userId;
+    let query = `SELECT id, title FROM blogs WHERE owner = ${userId}`;
+    con.query(query, (err, blogs) => {
         if(err) return res.status(400).json( {message: "Error occur (get your blogs) " + err} );
         return res.status(200).json( blogs );
     })
 }
 
 module.exports.requestRelatedBlogId = async (req, res, next, id) => {
-    await Blog.findById(id, (err, blog) => {
+    let query = `SELECT * FROM blogs WHERE id = ${id}`;
+    console.log(query);
+    con.query(query, (err, blog) => {
         if(err) return res.status(400).json( {message: "Error occur (get single blog)"} );
-        req.blogInfo = blog;
-    });
-    next();
+        req.blogInfo = blog[0];
+        next();
+    })
 }
 
 module.exports.getSingleBlog = (req, res) => {
+    
     return res.status(200).json(req.blogInfo);
 }
 
