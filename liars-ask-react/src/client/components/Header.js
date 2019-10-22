@@ -190,12 +190,12 @@ class Header extends Component {
                                 <ul className="list-rest s-anchors">
                                     <li>
                                         <Link to={`/users/${uid}`}>
-                                            <span className="fs-body1 d-block">Your profile</span>
+                                            <span className="fs-body1 d-block" style={{padding: ".8em"}}>Your profile</span>
                                         </Link>
                                     </li>
                                     <li>
                                         <Link to="/questions">
-                                            <span className="fs-body1 d-block">Your questions</span>
+                                            <span className="fs-body1 d-block" style={{padding: ".8em"}}>Your questions</span>
                                         </Link>
                                     </li>
                                     <hr className="oc7"/>

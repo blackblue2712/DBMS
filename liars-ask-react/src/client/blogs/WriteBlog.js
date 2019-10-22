@@ -21,7 +21,7 @@ class WriteBlog extends React.Component {
         try {
             let token = isAuthenticated().token;
             let owner = isAuthenticated().user._id;
-            let editor = document.querySelector("textarea.mde-text ");
+            let editor = document.querySelector("textarea.mde-text");
             let body = "";
             if(editor) {
                 body = editor.value;
@@ -34,7 +34,10 @@ class WriteBlog extends React.Component {
                 if(title) {
                     postWriteBlog({title, body, tagsnameArray, owner}, token)
                     .then( res => {
-                        this.setState( {message: res.message} );
+                        document.getElementById("title").value = "";
+                        document.getElementById("tagsname").value = "";
+                        editor.value = "";
+                        this.setState( {message: res.message, tagDom: ""} );
                     })
                 }
             } else {

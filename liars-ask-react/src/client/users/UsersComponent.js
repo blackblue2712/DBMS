@@ -54,7 +54,7 @@ class TagsComponent extends Component {
                                     userLocation="Bratislava, Slovakia"
                                     userImage={user.photo || DefaultImage}
                                     userReputation="1,110"
-                                    id={user._id}
+                                    id={user.id}
                                 />        
                             })
                         }

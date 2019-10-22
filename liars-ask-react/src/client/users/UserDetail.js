@@ -26,6 +26,7 @@ class UserDetail extends React.Component {
     
             // get info user logged
             let userInfo = await getLoggedUser(_id, token);
+            console.log(userInfo)
             if(Number(userInfo.message) === 404) {
                 this.props.history.push("/404");
             }
