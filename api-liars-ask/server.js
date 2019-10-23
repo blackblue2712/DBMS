@@ -32,6 +32,7 @@ const userRoute = require("./routes/users");
 const authRoute = require("./routes/auth");
 const askRoute = require("./routes/asks");
 const blogRoute = require("./routes/blogs");
+const tagRoute = require("./routes/tags");
 // const galleryRoute = require("./routes/galleries");
 
 
@@ -47,6 +48,8 @@ app.use("/users", userRoute);
 app.use("/auth", authRoute);
 app.use("/asks", askRoute);
 app.use("/blogs", blogRoute);
+app.use("/tags", tagRoute);
+
 
 // app.use("/galleries", galleryRoute);
 

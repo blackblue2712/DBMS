@@ -12,7 +12,8 @@ const {
     getSingleBlog,
     requestRelatedBlogId,
     putEditBlog,
-    getYourBlogs
+    getYourBlogs,
+    postDelete
 } = require("../controllers/blogs");
 
 router.get("/", getBlogs);
@@ -21,6 +22,7 @@ router.post("/write", requireSignin, postWriteBlog)
 router.get("/your-blogs", getYourBlogs);
 router.get("/:blogId", getSingleBlog);
 router.put("/edit/:blogId", requireSignin, putEditBlog);
+router.post("/delete/:blogId", requireSignin, postDelete);
 
 router.param("blogId", requestRelatedBlogId);
 

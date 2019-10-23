@@ -63,3 +63,12 @@ module.exports.putEditBlog = (req, res) => {
         return res.status(200).json( {message: "Done"} );
     })
 }
+
+module.exports.postDelete = (req, res) => {
+    console.log(req);
+    let query = `DELETE blogs WHERE id = ${req.query.blogId}`;
+    con.query(query, (err, result) => {
+        if(err) return res.status(400).json( {message: "Error occur (delete blog)"} )
+        return res.status(200).json( {message: "Done"} );
+    })
+}

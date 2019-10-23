@@ -10,7 +10,7 @@ const {
     updateStoryUser,
     getUploadImages,
     postUploadImage,
-    putDeleteUploadedImage
+    putDeleteUploadedImage,
 } = require("../controllers/users");
 
 router.get("/", getUsers);

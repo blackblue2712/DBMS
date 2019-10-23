@@ -14,13 +14,14 @@ class QuestionsComponent extends Component {
             ques: {},
             answersArr: []
         }
+
+        this.clearText = this.clearText.bind(this);
     }
 
     async componentDidMount() {
         const data = await getSingleQuestion(this.props.match.params.quesId);
-        console.log(data)
         if(!data.message) {
-            this.setState( {ques: data, answersArr: data.answers} );
+            this.setState( {ques: data, answersArr: data.answers === null ? [] : data.answers} );
         } else {
             this.props.history.push("/404");
         }
@@ -28,6 +29,11 @@ class QuestionsComponent extends Component {
 
     handleAddAnswer = (ans) => {
         this.setState( {answersArr: [...this.state.answersArr, ans]} );
+        this.clearText();
+    }
+
+    clearText = () => {
+        document.querySelector(".mde-text").value = "";
     }
 
     render() {
