@@ -2,10 +2,12 @@ import React from 'react';
 import UserDetailBasic from './UserDetailBasic';
 import UserDetailStory from './UserDetailStory';
 import { getLoggedUser, isAuthenticated } from '../../controllers/userController';
-import { getYourQuestions } from '../../controllers/askController';
-import { getYourBlogs } from '../../controllers/blogController';
+import { getYourQuestions, deleteQuestion } from '../../controllers/askController';
+import { getYourBlogs, deleteBlog } from '../../controllers/blogController';
 import Notify from '../components/Notify';
 import { Link } from 'react-router-dom';
+import DeleteIcon from '../../images/delete.svg';
+import Loading from '../../images/loading.gif';
 
 
 class UserDetail extends React.Component {
@@ -26,19 +28,56 @@ class UserDetail extends React.Component {
     
             // get info user logged
             let userInfo = await getLoggedUser(_id, token);
-            console.log(userInfo)
             if(Number(userInfo.message) === 404) {
                 this.props.history.push("/404");
             }
             // get your questions
-            // let yourQuestions = await getYourQuestions(userId);
+            let yourQuestions = await getYourQuestions(userId);
             // get your blogs
             let yourBlogs = await getYourBlogs(userId);
 
-            // this.setState( {userPayload: userInfo, questions: yourQuestions, blogs: yourBlogs} );
-            this.setState( {userPayload: userInfo, blogs: yourBlogs} );
+            this.setState( {userPayload: userInfo, questions: yourQuestions, blogs: yourBlogs} );
         } catch (err) {
             console.log(err);
+        }
+    }
+
+    handleDeleteBlog = (id, title) => (event) => {
+        let flag = window.confirm(`Are you sure to delete blog "${title}" ?`);
+        if(flag) {
+            document.querySelector(`#img-delete-${id}`).src = Loading;
+            try {
+                deleteBlog(id, isAuthenticated().token)
+                .then( res => {
+                    if(res && res.message === "Done") {
+                        if(document.querySelector(`#onRemoveBlog-${id}`)) {
+                            document.querySelector(`#onRemoveBlog-${id}`).remove();
+                        }
+                    }
+                })
+            } catch (err) {
+                console.log(err)
+            }
+        }
+    }
+
+    handleDeleteYourQuestion = (id, title) => (event) => {
+        let flag = window.confirm(`Are you sure to delete question "${title}" ?`);
+        if(flag) {
+            document.querySelector(`#img-delete-ques-${id}`).src = Loading;
+            try {
+                deleteQuestion(id, isAuthenticated().token)
+                .then( res => {
+                    console.log(res);
+                    if(res && res.message === "Done") {
+                        if(document.querySelector(`#onRemoveQuestion-${id}`)) {
+                            document.querySelector(`#onRemoveQuestion-${id}`).remove();
+                        }
+                    }
+                })
+            } catch (err) {
+                console.log(err)
+            }
         }
     }
 
@@ -168,8 +207,12 @@ class UserDetail extends React.Component {
                                     {
                                         questions.map( (q, i) => {
                                             return (
-                                                <p key={i}>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="#626262" d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10s10-4.477 10-10S17.523 2 12 2zm1 17h-2v-2h2v2zm2.067-7.746l-.895.918C13.448 12.895 13 13.5 13 15h-2v-.5c0-1.104.448-2.104 1.171-2.828l1.243-1.258A2 2 0 1 0 10 9H8a4 4 0 0 1 8 0c0 .88-.357 1.677-.933 2.254z"/></svg>
+                                                <p key={i} id={`onRemoveQuestion-${q.id}`}>
+                                                    <img
+                                                        width="15" height="15" style={{cursor: "pointer"}} src={DeleteIcon} alt="delete-icon"
+                                                        id={`img-delete-ques-${q.id}`}
+                                                        onClick={this.handleDeleteYourQuestion(q.id, q.title)}
+                                                    />
                                                     &nbsp;
                                                     <Link className="text-54b8ff" to={`/questions/ask/edit/${q.id}`}>{q.title}</Link>
                                                 </p>
@@ -188,7 +231,13 @@ class UserDetail extends React.Component {
                                     {
                                         blogs.map( (blog, i) => {
                                             return (
-                                                <p key={i}>
+                                                <p key={i} id={`onRemoveBlog-${blog.id}`}>
+                                                    <img
+                                                        width="15" height="15" style={{cursor: "pointer"}} src={DeleteIcon} alt="delete-icon"
+                                                        id={`img-delete-${blog.id}`}
+                                                        onClick={this.handleDeleteBlog(blog.id, blog.title)}
+                                                    />
+                                                    &nbsp;
                                                     <Link className="text-54b8ff" to={`/blogs/edit/${blog.id}`}>{blog.title}</Link>
                                                 </p>
                                             )

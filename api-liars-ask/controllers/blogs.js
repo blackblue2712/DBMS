@@ -1,8 +1,7 @@
 const { addslashes } = require("../helper/helper");
 module.exports.postWriteBlog = (req, res) => {
-    console.log(req.body);
     let { title, body, tagsnameArray, owner } = req.body;
-    let query = `INSERT INTO blogs (title, body, anonymousTags, owner) VALUES ('${addslashes(title)}', '${addslashes(body)}', '${JSON.stringify(addslashes(tagsnameArray))}', '${owner}')`;
+    let query = `INSERT INTO blogs (title, body, anonymousTags, owner) VALUES ('${addslashes(title)}', '${addslashes(body)}', '${JSON.stringify(tagsnameArray)}', '${owner}')`;
     con.query(query, (err, result) => {
         if(err) return res.status(400).json( {message: "Error occur (wirte blog)"} );
         return res.status(200).json( {message: "Done"} )
@@ -64,11 +63,10 @@ module.exports.putEditBlog = (req, res) => {
     })
 }
 
-module.exports.postDelete = (req, res) => {
-    console.log(req);
-    let query = `DELETE blogs WHERE id = ${req.query.blogId}`;
+module.exports.deleteBlog = (req, res) => {
+    let query = `DELETE FROM blogs WHERE id = ${req.query.id}`;
     con.query(query, (err, result) => {
         if(err) return res.status(400).json( {message: "Error occur (delete blog)"} )
         return res.status(200).json( {message: "Done"} );
-    })
+    });
 }

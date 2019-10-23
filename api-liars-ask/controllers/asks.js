@@ -19,13 +19,13 @@ module.exports.getQuestions = (req, res) => {
     })
 }
 
-// module.exports.getYourQuestions = (req, res) => {
-//     Ques.find({owner: req.query.userId}, "title _id", (err, ques) => {
-        
-//         if(err) return res.status(400).json( {message: "Error occur"} );
-//         return res.status(200).json(ques);
-//     })
-// }
+module.exports.getYourQuestions = (req, res) => {
+    let query = `SELECT id, title FROM questions WHERE owner = ${req.query.userId}`;
+    con.query(query, (err, ques) => {
+        if(err) return res.status(400).json( {message: "Error occur"} );
+        return res.status(200).json(ques);
+    })
+}
 
 
 module.exports.requestRelatedQuestionId = (req, res, next, id) => {
@@ -104,3 +104,30 @@ module.exports.updateQuestionAfterPostAnswer = (req, res) => {
 // module.exports.getAnswers = (req, res) => {
 
 // }
+
+module.exports.deleteQuestion = (req, res) => {
+    let id = req.query.id;
+    let query = `DELETE FROM questions WHERE id = ${Number(id)}`;
+    con.query(query, (err, result) => {
+        if(err) return res.status(400).json( {message: "Error occur (delete ques)"} )
+        return res.status(200).json( {message: "Done"} );
+    });
+}
+
+module.exports.deleteAnswersRelatedQuestion = (req, res, next) => {
+    let idQues = req.query.id;
+    let query = `SELECT answers FROM questions WHERE id = ${Number(idQues)}`;
+    con.query(query, (err, result) => {
+        if(err) return res.status(400).json( {message: "Error occur (select ans to delete)"} )
+        if(result[0].answers) {
+            let answer = JSON.parse(result[0].answers);
+            let queryDelete = `DELETE FROM answers WHERE id IN (${answer.join(",")})`;
+            con.query(queryDelete, (err, result) => {
+                if(err) return res.status(400).json( {message: "Error occur (delete ans)"} )
+                next();
+            })
+        } else {
+            next();
+        }
+    });
+}

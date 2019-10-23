@@ -50,7 +50,7 @@ export const getSingleQuestion = (id) => {
 }
 
 export const getYourQuestions = (userId) => {
-    return fetch(`${process.env.REACT_APP_API_URL}/asks/your-questions?userId=${String(userId)}`, {
+    return fetch(`${process.env.REACT_APP_API_URL}/asks/your-questions?userId=${Number(userId)}`, {
         method: "GET",
         headers: {
             Accept: "Application/json",
@@ -117,4 +117,21 @@ export const putEditQuestion = (quesInfo, token) => {
     .catch( err => {
         return {message: "ERROR PUT UPDATE"}
     });
+}
+
+export const deleteQuestion = (quesId, token) => {
+    console.log(quesId, token)
+    return fetch(`${process.env.REACT_APP_API_URL}/asks/delete?id=${Number(quesId)}`, {
+        method: "DELETE",
+        headers: {
+            Accept: "Application/json",
+            Authorization: `Bearer ${token}`
+        }
+    })
+    .then( res => {
+        return res.json();
+    })
+    .catch( err => {
+        return { message: "ERROR DELETE QUESTION" }
+    })
 }

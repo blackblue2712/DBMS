@@ -1,3 +1,4 @@
+import { base16AteliersulphurpoolLight } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 export const postWriteBlog = (blogInfo, token) => {
     return fetch(`${process.env.REACT_APP_API_URL}/blogs/write`, {
@@ -98,4 +99,22 @@ export const putEditBlog = (blogInfo, token) => {
     .catch( err => {
         return {message: "ERROR EDIT BLOG"}
     })
+}
+
+export const deleteBlog = (blogId, token) => {
+    console.log(blogId, token);
+    return fetch(`${process.env.REACT_APP_API_URL}/blogs/delete?id=${Number(blogId)}`, {
+        method: "DELETE",
+        headers: {
+            Accept: "Application/json",
+            Authorization: `Bearer ${token}`
+        }
+    })
+    .then( res => {
+        return res.json();
+    })
+    .catch( err => {
+        return { message: "ERROR DELETE BLOG" }
+    })
+    
 }
