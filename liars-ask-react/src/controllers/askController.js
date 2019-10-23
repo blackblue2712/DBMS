@@ -102,6 +102,7 @@ export const getAnswers = (quesId) => {
 }
 
 export const putEditQuestion = (quesInfo, token) => {
+    console.log(quesInfo)
     return fetch(`${process.env.REACT_APP_API_URL}/asks/questions/edit/${quesInfo.id}`, {
         method: "PUT",
         headers: {

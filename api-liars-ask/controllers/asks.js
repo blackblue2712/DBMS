@@ -88,22 +88,26 @@ module.exports.updateQuestionAfterPostAnswer = (req, res) => {
     })
 }
 
-// module.exports.putUpdateQuestion = (req, res) => {
-//     let ques = req.quesInfo;
-//     let { title, body, tagsnameArray } = req.body;
-//     if(body) ques.body = body;
-//     ques.title = title;
-//     ques.anonymousTags = tagsnameArray;
+module.exports.putUpdateQuestion = (req, res) => {
+    let ques = req.quesInfo;
+    let { title, body, tagsnameArray } = req.body;
+    let query = "";
+    
+    if(body) {
+        query = `UPDATE questions SET title = '${addslashes(title)}', anonymousTags = '${JSON.stringify(tagsnameArray)}', body = '${addslashes(body)}' WHERE id = ${ques.id}`;
+    } else {
+        query = `UPDATE questions SET title = '${addslashes(title)}', anonymousTags = '${JSON.stringify(tagsnameArray)}' WHERE id = ${ques.id}`;
+    }
 
-//     ques.save( (err, result) => {
-//         if(err) return res.status(400).json( {message: "Error occur (edit ques)"} )
-//         return res.status(200).json( {message: "Done"} );
-//     });
-// }
+    con.query(query, (err, result) => {
+        if(err) return res.status(400).json( {message: "Error occur (edit blog)"} )
+        return res.status(200).json( {message: "Done"} );
+    })
+}
 
-// module.exports.getAnswers = (req, res) => {
+module.exports.getAnswers = (req, res) => {
 
-// }
+}
 
 module.exports.deleteQuestion = (req, res) => {
     let id = req.query.id;
