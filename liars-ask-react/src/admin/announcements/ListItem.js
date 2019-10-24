@@ -28,7 +28,7 @@ class ListItem extends Component {
         return (
             <div className={`item-list narrow d-flex ${Boolean(isImportant)} ${id}`}>
                 {
-                    isImportant && <img className="important-message" src={Important} alt="important message"/>
+                    Boolean(isImportant) && <img className="important-message" src={Important} alt="important message"/>
                 }
                 <div className="cp d-flex">
                 <img className="img-close-acm" title="delete this announcement" src={CloseAcm} alt="close-acm" onClick={() => this.handleDeleteAcm(id)}/>

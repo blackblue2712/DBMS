@@ -20,7 +20,7 @@ module.exports.postAnnouncement = (req, res) => {
 }
 
 module.exports.getAnnouncements = (req, res) => {
-    let query = "SELECT * FROM announcements";
+    let query = "SELECT * FROM announcements ORDER BY created DESC";
     con.query(query, (err, acms) => {
         if(err) return res.status(400).json( {message: "Error occur"} );
         return res.status(200).json( {message: `${acms.length} announcements loaded`, payload: acms});
@@ -28,9 +28,10 @@ module.exports.getAnnouncements = (req, res) => {
 }
 
 module.exports.requestRelatedAcmId = async (req, res, next, id) => {
-    await Acm.findById(id, (err, acm) => {
-        if(err || !acm) return res.status(400).json( {message: "Error occur 123"} );
-        req.acmInfo = acm;
+    let query = `SELECT * FROM announcements WHERE id = ${Number(id)}`;
+    await con.query(query, (err, acm) => {
+        if(err || !acm) return res.status(400).json( {message: "Error occur requesRelatedAcmId"} );
+        req.acmInfo = acm[0];
         next();
     });
 }
@@ -42,12 +43,19 @@ module.exports.getSingleAcm = (req, res) => {
 module.exports.putEditAcm = (req, res) => {
     let { title, body, isImportant, tagsnameArray } = req.body;
     let acm = req.acmInfo;
-    if(body) acm.body = body;
-    acm.title = title;
-    acm.isImportant = isImportant;
-    acm.anonymousTags = tagsnameArray;
-    
-    acm.save( (err, result) => {
+    let query = "";
+
+    if(body) {
+        query = `UPDATE announcements 
+                SET title = '${addslashes(title)}', isImportant = ${Boolean(isImportant)},
+                body = '${addslashes(body)}', anonymousTags = '${JSON.stringify(tagsnameArray)}'
+                WHERE id = ${Number(acm.id)}`;
+    } else {
+        query = `UPDATE announcements 
+                SET title = '${addslashes(title)}', isImportant = ${Boolean(isImportant)}, anonymousTags = '${JSON.stringify(tagsnameArray)}'
+                WHERE id = ${Number(acm.id)}`;
+    }
+    con.query(query, (err, result) => {
         if(err) return res.status(400).json( {message: "Error occur (edit acm)", status: 400} );
         return res.status(200).json( {message: "Done", status: 200, payload: result} );
     });
@@ -55,8 +63,9 @@ module.exports.putEditAcm = (req, res) => {
 
 module.exports.deleteEditAcm = (req, res) => {
     let acm = req.acmInfo;
-    acm.remove( (err, result) => {
+    let query = `DELETE FROM announcements WHERE id = ${acm.id}`;
+    con.query(query, (err, result) => {
         if(err) return res.status(400).json( {message: "Error occur (delete acm)"} );
         return res.status(200).json( {message: "Done"} );
-    });
+    })
 }
