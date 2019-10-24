@@ -12,9 +12,9 @@ class ListItem extends Component {
     render() {
         const { title, body, isImportant, tags, id } = this.props;
         return (
-            <div className={`item-list narrow d-flex ${isImportant}`}>
+            <div className={`item-list narrow d-flex ${Boolean(isImportant)}`}>
                 {
-                    isImportant && <img className="important-message" src={Important} alt="important message"/>
+                    Boolean(isImportant) && <img className="important-message" src={Important} alt="important message"/>
                 }
                 <div className="cp d-flex">
                     <div className="votes">

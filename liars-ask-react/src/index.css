@@ -45,6 +45,7 @@ html
 }
 * {
   box-sizing: border-box;
+  overflow-wrap: break-word;
 }
 
 body {
@@ -74,7 +75,7 @@ pre blockquote {
 }
 pre img, .md-content img {
   max-width: 876px;
-  width: 100%;
+  /* width: 100%; */
 }
 a {
   text-decoration: none;
@@ -428,13 +429,13 @@ code {
     width: 220px !important;
   }
   .subheader {
-    width: 500px !important;
+    /* width: 500px !important; */
   }
   /* #footer {
     width: 500px;
   } */
   #sidebar {
-    width: 500px !important;
+    /* width: 500px !important; */
   }
 }
 
@@ -478,7 +479,7 @@ code {
     display: block !important;
   }
   #mainbar {
-    width: 500px !important;
+    /* width: 500px !important; */
   }
 }
 @media screen and (min-width: 527px) {

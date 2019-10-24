@@ -27,7 +27,7 @@ class SingleAcm extends React.Component {
         const { acm } = this.state
         return (
             <div id="content">
-                <div id="mainbar">
+                <div id="mainbar" className="w-100">
                     <div className="main-head">
                         <div className="grid d-flex align-items-centers mb16">
                             <h1 className="fs-headline1 mr-auto">{acm.title}</h1>

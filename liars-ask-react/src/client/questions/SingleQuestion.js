@@ -41,7 +41,7 @@ class QuestionsComponent extends Component {
         let { ques, answersArr } = this.state;
         return (
             <div id="content">
-                <div id="mainbar">
+                <div id="mainbar" className="w-100">
 
                     <div className="main-head">
                         <div className="grid d-flex align-items-centers mb16">
