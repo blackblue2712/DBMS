@@ -15,6 +15,7 @@ class TagsComponent extends Component {
 
     async componentDidMount() {
         const users = await getUsers();
+        console.log(users)
         this.setState( {users} );
         
     }

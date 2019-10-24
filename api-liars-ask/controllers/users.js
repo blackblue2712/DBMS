@@ -8,10 +8,11 @@ cloudinary.config({
 });
 
 module.exports.getUsers = (req, res) => {
-    let query = "SELECT email, fullname, photo, id, created_at FROM users";
+    // let query = "SELECT email, fullname, photo, id, created_at FROM users";
+    let query = "CALL getAllUsers()";
     con.query(query, (err, users, fl) => {
         if(err) return res.status(400).json( {message: "Error occur"} );
-        return res.status(200).json(users);
+        return res.status(200).json(users[0]);
     });
 }
 
@@ -28,12 +29,15 @@ module.exports.getInfoLoggedUser = (req, res) => {
 
 module.exports.requrestRelatedUserId = async (req, res, next, id) => {
     try {
-        let query = `SELECT * FROM users WHERE id=${id}`;
+        // let query = `SELECT * FROM users WHERE id=${id}`;
+        let query = `CALL getUserById(${Number(id)})`;
+        console.log(query)
         con.query(query, (err, user) => {
+            console.log(user[0][0])
             if(err || user.length === 0) {
                 return res.status(404).json( {message: 404} );
             } else {
-                req.userPayload = user[0];
+                req.userPayload = user[0][0];
                 next();
             }
         })
@@ -70,17 +74,17 @@ module.exports.updateInfoUser = (req, res) => {
             cloudinary.v2.uploader.upload(files.photo.path, function(error, result) {
                 user.photo = result.secure_url;
                 }).then( () => {
-                    let query = "UPDATE users SET fullname='" + fullname + "' , photo='" + addslashes(user.photo) + "' WHERE id=" + user.id;
+                    // let query = "UPDATE users SET fullname='" + addslashes(fullname) + "' , photo='" + addslashes(user.photo) + "' WHERE id=" + user.id;
+                    let query = `CALL updateUserInfoAndRelatedAnswers('${addslashes(fullname)}', '${addslashes(user.photo)}', ${Number(user.id)})`;
                     con.query(query, (err, result) => {
                         if(err) {
-
                             return res.status(400).json( {message: "Error occur. Please try again"} )
                         }
                         return res.status(200).json( {message: `Info updated!`} );
                     })
                 })
         } else {
-            let query = "UPDATE users SET fullname='" + fullname +  "' WHERE id=" + user.id;
+            let query = "UPDATE users SET fullname='" + addslashes(fullname) +  "' WHERE id=" + user.id;
             con.query(query, (err, result) => {
                 if(err) {
                     return res.status(400).json( {message: "Error occur. Please try again"} )

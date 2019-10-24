@@ -4,8 +4,11 @@ const { addslashes } = require("../helper/helper");
 module.exports.postAsk = (req, res) => {
     let { title, body, tagsnameArray, owner } = req.body;
     
-    let query = `INSERT INTO questions (title, body, anonymousTags, owner) VALUES ('${addslashes(title)}', '${addslashes(body)}', '${JSON.stringify(tagsnameArray)}', ${owner})`;
+    // let query = `INSERT INTO questions (title, body, anonymousTags, owner) VALUES ('${addslashes(title)}', '${addslashes(body)}', '${JSON.stringify(tagsnameArray)}', ${owner})`;
+    let query = `CALL AddAQuestion('${addslashes(title)}', '${addslashes(body)}', '${JSON.stringify(tagsnameArray)}', ${Number(owner)})`;
+    console.log(query)
     con.query(query, (err, result) => {
+        console.log(err)
         if(err) return res.status(400).json( {message: "Error occur (ask question)"} );
         return res.status(200).json( {message: "Done"} )
     });
@@ -57,12 +60,13 @@ module.exports.getSigleQuestion = (req, res) => {
 module.exports.postAnswer = (req, res, next) => {
     let { body, userId, email, fullname, photo } = req.body;
     fullname = fullname === null ? " " : fullname;
-    let query = `INSERT INTO answers (body, owner, email, photo, fullname) VALUES('${addslashes(body)}', ${userId}, '${addslashes(email)}', '${addslashes(photo)}', '${addslashes(fullname)}')`;
-    console.log(query)
+    // let query = `INSERT INTO answers (body, owner, email, photo, fullname) VALUES('${addslashes(body)}', ${userId}, '${addslashes(email)}', '${addslashes(photo)}', '${addslashes(fullname)}')`;
+    // let query = `CALL AddAnAnswer('${addslashes(body)}', ${Number(userId)}, '${addslashes(email)}', '${addslashes(photo)}', '${addslashes(fullname)}')`;
+    let query = `SELECT AddAnAnswer ('${addslashes(body)}', ${Number(userId)}, '${addslashes(email)}', '${addslashes(photo)}', '${addslashes(fullname)}') AS insertedId`
     con.query(query, (err, result, fields) => {
-        console.log(err)
+        console.log(result[0])
         if(err) return res.status(400).json( {message: "Error occur (add answer)"} );
-        req.answerId = result.insertId;
+        req.answerId = result[0].insertedId;
         next();
     })
 }
