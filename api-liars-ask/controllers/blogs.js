@@ -1,4 +1,5 @@
 const { addslashes } = require("../helper/helper");
+
 module.exports.postWriteBlog = (req, res) => {
     let { title, body, tagsnameArray, owner } = req.body;
     let query = `INSERT INTO blogs (title, body, anonymousTags, owner) VALUES ('${addslashes(title)}', '${addslashes(body)}', '${JSON.stringify(tagsnameArray)}', '${owner}')`;

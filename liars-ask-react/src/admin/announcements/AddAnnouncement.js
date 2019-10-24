@@ -40,10 +40,16 @@ const AddAnnouncements = props => {
             tagsnameArray = tagsnameArray.filter( t => t !== "");
 
             if(title && body) {
-                postAnnouncement({title, body, isImportant, tagsnameArray, id}, token)
-                .then( res => {
-                    setShowNotify(res.message);
-                })
+                try {
+                    postAnnouncement({title, body, isImportant, tagsnameArray, id}, token)
+                    .then( res => {
+                        if(res) setShowNotify(res.message);
+                    })
+                } catch (err) {
+                    console.log(err);
+                    setShowNotify("Error catched");
+                }
+                
             }
         } else {
             alert("Please turn to write mode")
@@ -133,7 +139,6 @@ const AddAnnouncements = props => {
                                                 
                                                 {
                                                     tagDom.split(" ").map( (tag, index) => {
-                                                        console.log(tag);
                                                         return tag !== "" && <Tags key={index} id={"data-" + tag} closeTag={() => closeTag(tag)} name={tag} close={true}/>
                                                     })
                                                 }

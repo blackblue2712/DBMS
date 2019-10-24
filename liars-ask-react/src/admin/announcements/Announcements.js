@@ -18,14 +18,19 @@ class Announcements extends Component {
     }
 
     componentDidMount() {
-        getAnnouncements()
-        .then( res => {
-            if(res.payload) {
-                this.setState( {acms: res.payload, message: res.message} );
-            } else {
-                this.setState( {message: res.message} );
-            }
-        })
+        try {
+            getAnnouncements()
+            .then( res => {
+                if(res.payload) {
+                    this.setState( {acms: res.payload, message: res.message} );
+                } else {
+                    this.setState( {message: res.message} );
+                }
+            })
+        } catch (err) {
+            console.log(err);
+            this.setState( {message: "Error catched"} );
+        }
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -34,7 +39,7 @@ class Announcements extends Component {
 
     render() {
         const { message, acms } = this.state;
-        
+        console.log(acms)
         return (
             <>
                 <div className="main-head">

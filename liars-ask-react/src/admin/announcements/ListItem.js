@@ -26,7 +26,7 @@ class ListItem extends Component {
     render() {
         const { title, body, isImportant, tags, id } = this.props;
         return (
-            <div className={`item-list narrow d-flex ${isImportant} ${id}`}>
+            <div className={`item-list narrow d-flex ${Boolean(isImportant)} ${id}`}>
                 {
                     isImportant && <img className="important-message" src={Important} alt="important message"/>
                 }
@@ -61,7 +61,7 @@ class ListItem extends Component {
                         }
                     </div>
                     {
-                        tags && tags.map( (t, i) => {
+                        tags && JSON.parse(tags).map( (t, i) => {
                             return <Tags key={i} name={t}/>
                         })
                     }

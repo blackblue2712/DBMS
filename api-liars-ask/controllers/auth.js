@@ -27,14 +27,12 @@ module.exports.postSignin = (req, res) => {
     let query   = "SELECT users.id, email, hashed_password, salt, fullname, photo, permission";
     query       += " FROM users, privileges"
     query       += " WHERE users.roles = privileges.id AND email='"+email+"'"
-    console.log(query);
     con.query(query, (err, user, fields) => {
-        console.log(user)
         if(!err && user.length > 0) {
             let { salt, hashed_password, email, fullname, photo, permission } = user[0];
             let _id = user[0].id;
             if(hashed_password === crypto.createHmac("sha256", salt).update(password).digest("hex")) {
-                const token = jwt.sign( {_id, roles: user.permission}, process.env.JWT_SECRET );
+                const token = jwt.sign( {_id, roles: permission}, process.env.JWT_SECRET );
                 res.cookie('token', token, {maxAge: 900000} );
                 const payload = {token, user: { _id, email, fullname, photo }}
                 return res.status(200).json( {message: "Signin successfully", payload} );

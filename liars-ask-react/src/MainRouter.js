@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, withRouter } from "react-router-dom";
 import RouteClient from './client/RouteClient';
-// import RouteAdmin from './admin/RouteAdmin';
+import RouteAdmin from './admin/RouteAdmin';
 import Auth from './client/auth/Auth';
 
 class MainRouter extends React.Component {
@@ -13,9 +13,9 @@ class MainRouter extends React.Component {
                    <Auth />
                 </>
             </Switch>
-        } // else if (isAdminPage === "admin"){
-            // return <RouteAdmin />
-        //}
+        } else if (isAdminPage === "admin"){
+            return <RouteAdmin />
+        }
         else {
             return <RouteClient />
         }
