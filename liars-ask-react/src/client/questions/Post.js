@@ -21,7 +21,6 @@ class Post extends Component {
 
     render() {
         let { ques } = this.state;
-        console.log(ques)
         return (
             <div className="post-layout d-flex">
                 <div className="votecell post-layout--left mr24">

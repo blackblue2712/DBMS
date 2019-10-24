@@ -18,8 +18,12 @@ const ModalPopup = props => {
             let inputAvatar = document.getElementById('preview-img');
             inputAvatar.src = reader.result;
         }
-        reader.readAsDataURL(event.target.files[0]);
-        formData.append("photo", event.target.files[0]);
+        try {
+            reader.readAsDataURL(event.target.files[0]);
+            formData.append("photo", event.target.files[0]);
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     const saveImg = () => {

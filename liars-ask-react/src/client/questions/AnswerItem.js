@@ -10,16 +10,26 @@ class AnswerItem extends React.Component {
         super();
         this.state = {
             count: 0,
-            active: ''
+            active: '',
+            isActive: ""
         }
     }
 
     componentDidMount() {
-        // this.setState( {count: this.props.data.votes.length} );
+        let voted = this.props.data.votes.split(" ");
+        let userId = isAuthenticated().user._id;
+        let check = voted.indexOf(String(userId))
+
+        if(check !== - 1) {
+            this.setState( {isActive: "active"} );
+        }
+
+        this.setState( {count: voted.length - 1} );
+
     }
 
     handleAnswerVoteUp = () => {
-        let ansId = this.props.data._id;
+        let ansId = this.props.data.id;
         let userId = isAuthenticated().user._id;
         let token = isAuthenticated().token;
         voteAnswerUp(ansId, userId, token)
@@ -30,10 +40,8 @@ class AnswerItem extends React.Component {
     }
     
     render() {
-        const { count, active } = this.state;
-        const ans = this.props.data;
-        // const isActive = this.props.data.votes.indexOf(isAuthenticated().user._id) !== -1 ? "active" : "";
-        const isActive = false;
+        const { count, active, isActive } = this.state;
+        const ans = this.props.data;    
         return (
             <div className="answer mt16 mb16">
                 <div className="post-layout d-flex">

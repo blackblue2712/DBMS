@@ -51,8 +51,13 @@ const UserDetailBasic = (props) => {
             let inputAvatar = document.getElementById('user-photo');
             inputAvatar.src = reader.result;
         }
-        reader.readAsDataURL(event.target.files[0]);
-        setPhoto(event.target.files[0]);
+        try {
+            reader.readAsDataURL(event.target.files[0]);
+            setPhoto(event.target.files[0]);
+        } catch (err) {
+            //
+        }
+        
     }
 
     

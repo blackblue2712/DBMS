@@ -20,7 +20,6 @@ class QuestionsComponent extends Component {
 
     async componentDidMount() {
         const data = await getSingleQuestion(this.props.match.params.quesId);
-        console.log(data)
         if(!data.message && !data.error) {
             this.setState( {ques: data, answersArr: data.answers === null ? [] : data.answers} );
         } else {
