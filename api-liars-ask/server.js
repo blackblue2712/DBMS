@@ -35,6 +35,7 @@ const blogRoute = require("./routes/blogs");
 const tagRoute = require("./routes/tags");
 const AnnouncementRoute = require("./routes/announcements");
 const voteRoute = require("./routes/votes");
+const searchRoute = require("./routes/search");
 // const galleryRoute = require("./routes/galleries");
 
 
@@ -53,6 +54,7 @@ app.use("/blogs", blogRoute);
 app.use("/tags", tagRoute);
 app.use("/announcements", AnnouncementRoute);
 app.use("/votes", voteRoute);
+app.use("/search", searchRoute);
 
 // app.use("/galleries", galleryRoute);
 

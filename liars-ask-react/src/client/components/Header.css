@@ -176,3 +176,17 @@
 #user-popover .s-popover--arrow:after {
     left: 78% !important;
 }
+
+.search-questions-payload {
+    position: absolute;
+    width: 100%;
+    background: #2d2f2f;
+    opacity: .8;
+}
+.search-questions-payload div{
+    padding: 2px 12px;
+}
+.search-questions-payload a:hover{
+    color: rgb(51, 170, 255);
+    
+}

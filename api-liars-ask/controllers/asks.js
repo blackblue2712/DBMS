@@ -61,7 +61,6 @@ module.exports.postAnswer = (req, res, next) => {
     let { body, userId, email, fullname, photo } = req.body;
     fullname = fullname === null ? " " : fullname;
     // let query = `INSERT INTO answers (body, owner, email, photo, fullname) VALUES('${addslashes(body)}', ${userId}, '${addslashes(email)}', '${addslashes(photo)}', '${addslashes(fullname)}')`;
-    // let query = `CALL AddAnAnswer('${addslashes(body)}', ${Number(userId)}, '${addslashes(email)}', '${addslashes(photo)}', '${addslashes(fullname)}')`;
     let query = `SELECT AddAnAnswer ('${addslashes(body)}', ${Number(userId)}, '${addslashes(email)}', '${addslashes(photo)}', '${addslashes(fullname)}') AS insertedId`
     con.query(query, (err, result, fields) => {
         console.log(result[0])

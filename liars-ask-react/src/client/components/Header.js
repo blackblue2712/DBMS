@@ -5,6 +5,7 @@ import brandLogo from '../../images/logo.png';
 import signoutIcon from '../../images/logout.svg'
 import Default from '../../images/default.png';
 import { isAuthenticated, getSignout } from '../../controllers/userController';
+import { onSearchQuestions } from '../../controllers/searchController';
 
 class Header extends Component {
 
@@ -17,7 +18,8 @@ class Header extends Component {
             toggleProducts: false,
             toggleUser: false,
             uid: null,
-            photo: ""
+            photo: "",
+            questions: []
         }
 
         // this.handleToggleMenu = this.handleToggleMenu.bind(this);
@@ -27,7 +29,6 @@ class Header extends Component {
         if(isAuthenticated()) {
             this.setState( {uid: isAuthenticated().user._id, photo: isAuthenticated().user.photo} );
         }
-        console.log(isAuthenticated())
     }
 
     handleToggleMenu = () => {
@@ -104,8 +105,16 @@ class Header extends Component {
         })
     }
 
+    handleSubmitSearch = async () => {
+        window.event.preventDefault();
+        let ip = document.getElementById("query-search");
+        let questions = await onSearchQuestions(ip.value);
+        this.setState({questions: questions});
+    }
+
     render() {
-        const { uid, photo } = this.state;
+        const { uid, photo, questions } = this.state;
+        console.log(questions)
         return (
             <header id="header" className="ps-fixed w-100">
                 <div className="container d-flex align-items-center">
@@ -166,16 +175,32 @@ class Header extends Component {
                             </div>
                         </li>
                         <li className="w-100">
-                            <form action="#search">
+                            <form onSubmit={this.handleSubmitSearch}>
                                 <div className="ps-relative">
-                                    <input type="text" name="q" placeholder="Search..." maxLength="240" className="s-input s-input__search js-search-field w-100" />
-                                    <svg aria-hidden="true" className="svg-icon s-input-icon s-input-icon__search iconSearch" width="18" height="18" viewBox="0 0 18 18"><path d="M18 16.5l-5.14-5.18h-.35a7 7 0 1 0-1.19 1.19v.35L16.5 18l1.5-1.5zM12 7A5 5 0 1 1 2 7a5 5 0 0 1 10 0z"></path></svg>
+                                    <input id="query-search" type="text" name="q" placeholder="Search..." maxLength="240" className="s-input s-input__search js-search-field w-100" />
+                                    <svg
+                                        aria-hidden="true" className="svg-icon s-input-icon s-input-icon__search iconSearch" width="18" height="18" viewBox="0 0 18 18"><path d="M18 16.5l-5.14-5.18h-.35a7 7 0 1 0-1.19 1.19v.35L16.5 18l1.5-1.5zM12 7A5 5 0 1 1 2 7a5 5 0 0 1 10 0z"
+                                        onClick={this.handleSubmitSearch}
+                                    ></path></svg>
                                     <svg
                                         aria-hidden="false" className="svg-icon s-input-icon s-input-icon__search iconSearch d-none" width="18" height="18" viewBox="0 0 18 18"
-                                        onClick={this.handleToggleSearch}
+                                        onClick={this.handleSubmitSearch, this.handleToggleSearch}
                                     >
                                             <path d="M18 16.5l-5.14-5.18h-.35a7 7 0 1 0-1.19 1.19v.35L16.5 18l1.5-1.5zM12 7A5 5 0 1 1 2 7a5 5 0 0 1 10 0z"></path>
                                     </svg>
+                                    <div className="search-questions-payload">
+                                        {
+                                            questions.map( (ques, i) => {
+                                                return (
+                                                    <div class="list-sumary w-100" key={i}>
+                                                        <h3>
+                                                            <a className="hyper-link" href={`/questions/ask/${ques.id}`}>{ques.title}</a>
+                                                        </h3>
+                                                    </div>
+                                                )
+                                            })
+                                        }
+                                    </div>
                                 </div>
                             </form>
                         </li>

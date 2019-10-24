@@ -76,6 +76,7 @@ module.exports.updateInfoUser = (req, res) => {
                 }).then( () => {
                     // let query = "UPDATE users SET fullname='" + addslashes(fullname) + "' , photo='" + addslashes(user.photo) + "' WHERE id=" + user.id;
                     let query = `CALL updateUserInfoAndRelatedAnswers('${addslashes(fullname)}', '${addslashes(user.photo)}', ${Number(user.id)})`;
+                    console.log(query)
                     con.query(query, (err, result) => {
                         if(err) {
                             return res.status(400).json( {message: "Error occur. Please try again"} )
