@@ -46,7 +46,7 @@ class ListItem extends Component {
                         }
                     </div>
                     {
-                        tags && tags.map( (t, i) => {
+                        tags && JSON.parse(tags).map( (t, i) => {
                             return <Tags key={i} name={t}/>
                         })
                     }

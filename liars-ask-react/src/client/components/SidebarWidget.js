@@ -20,7 +20,7 @@ const SidebarWidget = props => {
                         key={i}
                         classIcon=""
                         widgetContent={blog.title}
-                        id={blog._id}
+                        id={blog.id}
                     />
                 })
             }

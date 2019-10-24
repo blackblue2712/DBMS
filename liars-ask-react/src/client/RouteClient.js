@@ -45,8 +45,8 @@ const RouteClient = props => {
                 <PrivateRoute exact path="/announcements/:acmId" component={SingleAcm} />
                 <PrivateRoute exact path="/blogs" component={Blogs} />
                 <PrivateRoute exact path="/blogs/write/new" component={WriteBlog} />
-                <PrivateRoute exact path="/blogs/:blogId" component={SingleBlog} />
                 <PrivateRoute exact path="/blogs/edit/:blogId" component={EditBlog} />
+                <PrivateRoute exact path="/blogs/:blogId" component={SingleBlog} />
                 <PrivateRoute exact path="/images-gallery" component={ImagesGallery} />
 
                 <PrivateRoute component={NotFound} to="/404"/>
