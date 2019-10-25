@@ -146,10 +146,10 @@ class Header extends Component {
                                         </Link>
                                     </li>
                                     <li>
-                                        <a href="/teams">
-                                            <span className="fs-body1 d-block">Teams</span>
-                                            <span className="fs-caption d-block">Private questions and answers for your team</span>
-                                        </a>
+                                        <Link to="/advance-search">
+                                            <span className="fs-body1 d-block">Advance Search</span>
+                                            <span className="fs-caption d-block">Advance search (search by questions, announcements, blogs, tags, date)</span>
+                                        </Link>
                                     </li>
                                     <li>
                                         <a href="/teams">

@@ -13,3 +13,20 @@ export const onSearchQuestions = (plainText) => {
         return {message: "ERROR SEARCH QUESTIONS"}
     })
 }
+
+export const onAdvanceSearch = (data) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/search/advance`, {
+        method: "POST",
+        headers: {
+            Accept: "Application/json",
+            "Content-Type": "Application/json"
+        },
+        body: JSON.stringify(data)
+    })
+    .then( res => {
+        return res.json();
+    })
+    .catch( err => {
+        return {message: "ERROR ADVANCE SEARCH"}
+    })
+}

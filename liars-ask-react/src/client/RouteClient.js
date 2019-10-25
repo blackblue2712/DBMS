@@ -20,6 +20,7 @@ import WriteBlog from './blogs/WriteBlog';
 import EditBlog from './blogs/EditBlog';
 import SinglePost from './questions/SingleQuestion'
 import ImagesGallery from './images-gallery/ImagesGallery';
+import AdvanceSearch from './components/AdvanceSearch';
 import PrivateRoute from '../PirvateRoute';
 import NotFound from './components/NotFound';
 
@@ -48,6 +49,8 @@ const RouteClient = props => {
                 <PrivateRoute exact path="/blogs/edit/:blogId" component={EditBlog} />
                 <PrivateRoute exact path="/blogs/:blogId" component={SingleBlog} />
                 <PrivateRoute exact path="/images-gallery" component={ImagesGallery} />
+
+                <PrivateRoute exact path="/advance-search" component={AdvanceSearch} />
 
                 <PrivateRoute component={NotFound} to="/404"/>
                 <PrivateRoute component={NotFound} />

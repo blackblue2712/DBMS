@@ -38,6 +38,7 @@ class QuestionsComponent extends Component {
 
     render() {
         let { ques, answersArr } = this.state;
+        console.log(ques)
         return (
             <div id="content">
                 <div id="mainbar" className="w-100">
@@ -53,15 +54,15 @@ class QuestionsComponent extends Component {
                         <div className="d-flex algin-items-center f13 bc-black-2 bb pb8">
                             <div className="mb8 mr16">
                                 <span className="fc-light mr2">Asked</span>
-                                <time>4 years, 9 months ago</time>
+                                <time>{new Date(ques.created).toLocaleString()}</time>
                             </div>
                             <div className="mb8 mr16">
-                                <span className="fc-light mr2">Asked</span>
+                                <span className="fc-light mr2">Actived</span>
                                 <a href="?lastactivity" className="s-link s-link__inherit" title="2019-09-24 15:23:18Z">today</a>
                             </div>
                             <div className="mb8 mr16">
                                 <span className="fc-light mr2">Viewed</span>        
-                                185k times
+                                0 times
                             </div>
                         </div>
                     </div>

@@ -887,3 +887,30 @@ input[type=checkbox]:checked:after {
   min-height: 640px;
   
 }
+
+.form-group select {
+  width: 135px;
+  padding: 4px 6px;
+  background: none;
+  outline: none;
+  border-color: #007bff;
+  border-radius: .25rem;
+  text-transform: capitalize;
+}
+.form-group label {
+  padding: 10px 0;
+  font-size: 16px;
+  color: #fff;
+  transition: .5s;
+  letter-spacing: 1px;
+}
+
+.form-group > label {
+  width: 120px;
+  display: inline-block;
+  color: black;
+}
+
+.hyper-link:hover {
+  color: #01427b !important;
+}
