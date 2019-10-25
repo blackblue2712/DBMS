@@ -35,13 +35,18 @@ class AnswerItem extends React.Component {
         voteAnswerUp(ansId, userId, token)
         .then( res => {
             console.log(res);
-            if(res.message === "Voted") this.setState( {count: res.votesLength, active: "active"} );
+            if(res.message === "Voted") {
+                this.setState( {count: res.votesLength, active: "active"} );
+            } else if(res.message === "unVote") {
+                this.setState( {count: res.votesLength, active: ""} );
+            }
+
         })
     }
     
     render() {
         const { count, active, isActive } = this.state;
-        const ans = this.props.data;    
+        const ans = this.props.data;   
         return (
             <div className="answer mt16 mb16">
                 <div className="post-layout d-flex">

@@ -114,7 +114,6 @@ class Header extends Component {
 
     render() {
         const { uid, photo, questions } = this.state;
-        console.log(questions)
         return (
             <header id="header" className="ps-fixed w-100">
                 <div className="container d-flex align-items-center">

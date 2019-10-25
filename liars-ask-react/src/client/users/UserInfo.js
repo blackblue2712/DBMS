@@ -6,13 +6,13 @@ const UserInfo = props => {
     return (
         <div className="grid-layout--cell tags-cell">
             <div className="user-gavatar48">
-                <Link to={`/users/${props.id}`}>
+                <Link to={`/users/${props.userId}`}>
                     <img className="user-avatar" loading="lazy" src={props.userImage || Default} alt="none"/>
                 </Link>
             </div>
             <div className="user-detail d-flex">
                 <div>
-                    <Link to={`/users/${props.id}`}>{props.username}</Link>
+                    <Link to={`/users/${props.userId}`}>{props.username}</Link>
                     <span className="user-location">{props.userFullname}</span>
                     <div className="-flair">
                         <span className="reputation-score" title="reputation this week: 1,110 total reputation: 413,462" dir="ltr">{props.userReputation}</span>

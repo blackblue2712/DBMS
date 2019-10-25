@@ -14,7 +14,7 @@ class SingleAcm extends React.Component {
         const id = this.props.match.params.acmId;
         getSingleAnnouncement(id)
         .then( res => {
-            if(!res.message) {
+            if(res && !res.message) {
                 this.setState( {acm: res} );
             } else {
                 this.props.history.push("/404");

@@ -16,8 +16,6 @@ module.exports.postAnnouncement = (req, res, next) => {
     //             VALUES ('${addslashes(title)}', '${addslashes(body)}', ${isImportant}, '${JSON.stringify(tagsnameArray)}', ${Number(id)})`;
     let query = `SELECT AddAnAnnouncement('${addslashes(title)}', '${addslashes(body)}', ${isImportant}, '${JSON.stringify(tagsnameArray)}', ${Number(id)}) AS insertedId`
     con.query(query, (err, result) => {
-        console.log(err)
-        console.log(result)
         if(err) return res.status(400).json( {message: "Error occur"} );
         req.acmId = result[0].insertedId;
         next();
@@ -96,7 +94,7 @@ module.exports.sendMailAfterPostAnnouncement = (req, res) => {
         '<p>Here is the link<a href='+ link +'>'+link+'</a></p>';
 
     let mailOptions = {
-        from: 'Blackblue',
+        from: 'Liars-ask',
         to: mailList,
         subject: 'New announcement',
         html: bodyMail
