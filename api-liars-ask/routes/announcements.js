@@ -10,11 +10,12 @@ const {
     getAnnouncements,
     getSingleAcm,
     putEditAcm,
-    deleteEditAcm
+    deleteEditAcm,
+    sendMailAfterPostAnnouncement
 } = require("../controllers/announcements")
 
 router.get("/", getAnnouncements);
-router.post("/new", requireSignin, isAdmin, postAnnouncement);
+router.post("/new", requireSignin, isAdmin, postAnnouncement, sendMailAfterPostAnnouncement);
 router.get("/:acmId", getSingleAcm);
 router.put("/edit/:acmId", requireSignin, isAdmin, putEditAcm);
 router.delete("/delete/:acmId", requireSignin, isAdmin, deleteEditAcm);

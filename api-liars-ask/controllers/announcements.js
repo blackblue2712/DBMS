@@ -1,6 +1,7 @@
 const { addslashes } = require("../helper/helper");
+const nodemailer = require("nodemailer");
 
-module.exports.postAnnouncement = (req, res) => {
+module.exports.postAnnouncement = (req, res, next) => {
     /**
      * anonymous tag?
      * 1. Select all tags from database and check exist tag in client side (> 1000 tags?) 
@@ -10,12 +11,16 @@ module.exports.postAnnouncement = (req, res) => {
      **/ 
 
     const { title, body, isImportant, tagsnameArray, id } = req.body;
-    let query = `INSERT INTO announcements 
-                (title, body, isImportant, anonymousTags, owner) 
-                VALUES ('${addslashes(title)}', '${addslashes(body)}', ${isImportant}, '${JSON.stringify(tagsnameArray)}', ${Number(id)})`;
+    // let query = `INSERT INTO announcements 
+    //             (title, body, isImportant, anonymousTags, owner) 
+    //             VALUES ('${addslashes(title)}', '${addslashes(body)}', ${isImportant}, '${JSON.stringify(tagsnameArray)}', ${Number(id)})`;
+    let query = `SELECT AddAnAnnouncement('${addslashes(title)}', '${addslashes(body)}', ${isImportant}, '${JSON.stringify(tagsnameArray)}', ${Number(id)}) AS insertedId`
     con.query(query, (err, result) => {
+        console.log(err)
+        console.log(result)
         if(err) return res.status(400).json( {message: "Error occur"} );
-        return res.status(200).json( {message: "Done", payload: result} );
+        req.acmId = result[0].insertedId;
+        next();
     })
 }
 
@@ -68,4 +73,42 @@ module.exports.deleteEditAcm = (req, res) => {
         if(err) return res.status(400).json( {message: "Error occur (delete acm)"} );
         return res.status(200).json( {message: "Done"} );
     })
+}
+
+module.exports.sendMailAfterPostAnnouncement = (req, res) => {
+    // let email = req.query.email;
+    let mailList = [
+        'danghuunghia2712@gmail.com',
+        'nghiab1706729@student.ctu.edu.vn'
+    ];
+    
+    // Send mail
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.user_mail,
+            pass: process.env.pass_mail
+        }
+    });
+
+    let link = process.env.CLIENT_URL + "/announcements/" + req.acmId;
+    let bodyMail = '<p>Hello little girl, new announcement added and u\'re should check it now</p>'+
+        '<p>Here is the link<a href='+ link +'>'+link+'</a></p>';
+
+    let mailOptions = {
+        from: 'Blackblue',
+        to: mailList,
+        subject: 'New announcement',
+        html: bodyMail
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            
+        }
+        return res.json( {message: "Request sent"} );
+    });
+
 }

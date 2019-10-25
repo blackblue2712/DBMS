@@ -26,6 +26,9 @@ const AddAnnouncements = props => {
     });
 
     const handlePostAcm =  () => {
+        let bntLoading = document.getElementById("wrap-btn-loading");
+        bntLoading.classList.add("btn-loading");
+
         let id = isAuthenticated().user._id;
         let token = isAuthenticated().token;
         let editor = document.querySelector("textarea.mde-text ");
@@ -43,16 +46,21 @@ const AddAnnouncements = props => {
                 try {
                     postAnnouncement({title, body, isImportant, tagsnameArray, id}, token)
                     .then( res => {
+                        bntLoading.classList.remove("btn-loading");
                         if(res) setShowNotify(res.message);
                     })
                 } catch (err) {
                     console.log(err);
                     setShowNotify("Error catched");
+                    bntLoading.classList.remove("btn-loading");
                 }
                 
+            } else {
+                bntLoading.classList.remove("btn-loading");
             }
         } else {
-            alert("Please turn to write mode")
+            alert("Please turn to write mode");
+            bntLoading.classList.remove("btn-loading");
         }
     }
 
@@ -160,14 +168,15 @@ const AddAnnouncements = props => {
                                 <p className="s-desscription mt4">Is this announcement important? Check it</p>
                             </label>
                         </div>
-                        <div className="ps-relative mb16">
+                        <div className="ps-relative mb24">
                             <input id="is-important" name="is-important" type="checkbox" className="" />
                         </div>
-
-                        <button
-                            className="s-btn s-btn__outline s-btn__primary mt24"
-                            onClick={handlePostAcm}
-                        >Post this</button>
+                        <div id="wrap-btn-loading" className="ps-relative" style={{width: "74px"}} >
+                            <button
+                                className="s-btn s-btn__outline s-btn__primary"
+                                onClick={handlePostAcm}
+                            >Post this</button>
+                        </div>
                     </div>
                 </div>
             </div>
