@@ -29,18 +29,19 @@ module.exports.getInfoLoggedUser = (req, res) => {
 
 module.exports.requrestRelatedUserId = async (req, res, next, id) => {
     try {
-        // let query = `SELECT * FROM users WHERE id=${id}`;
         let query = `CALL getUserById(${Number(id)})`;
-        console.log(query)
-        con.query(query, (err, user) => {
-            console.log(user[0][0])
-            if(err || user.length === 0) {
-                return res.status(404).json( {message: 404} );
-            } else {
-                req.userPayload = user[0][0];
-                next();
-            }
-        })
+        if(!isNaN(Number(id))) {
+            con.query(query, (err, user) => {
+                if(err || user.length === 0) {
+                    return res.status(404).json( {message: 404} );
+                } else {
+                    req.userPayload = user[0][0];
+                    next();
+                }
+            })
+        } else {
+            return res.status(404).json( {message: 404} );
+        }
     } catch (err) {
         return res.status(404).json( {message: 404} );
     }
@@ -76,7 +77,6 @@ module.exports.updateInfoUser = (req, res) => {
                 }).then( () => {
                     // let query = "UPDATE users SET fullname='" + addslashes(fullname) + "' , photo='" + addslashes(user.photo) + "' WHERE id=" + user.id;
                     let query = `CALL updateUserInfoAndRelatedAnswers('${addslashes(fullname)}', '${addslashes(user.photo)}', ${Number(user.id)})`;
-                    console.log(query)
                     con.query(query, (err, result) => {
                         if(err) {
                             return res.status(400).json( {message: "Error occur. Please try again"} )

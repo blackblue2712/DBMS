@@ -74,7 +74,8 @@ pre blockquote {
   padding: 2px 10px;
 }
 pre img, .md-content img {
-  max-width: 876px;
+  /* max-width: 876px; */
+  max-width: 100%;
   /* width: 100%; */
 }
 a {

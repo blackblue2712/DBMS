@@ -4,14 +4,14 @@ const Answer = require("../models/answers");
 module.exports.voteUp = (req, res) => {
     let { userId } = req.body;
     let ans = req.ansInfo;
-    let voted = ans.votes.split(" ");
+    let voted = ans.votes.split(" ").filter(t => t !== "");
 
     
     if(voted.indexOf(String(userId)) === -1) {
         let query = `UPDATE answers SET votes = ('${String(ans.votes)} ${String(userId)}') WHERE id = ${Number(ans.id)}`;
         con.query(query, (err, result) => {
             if(err) return res.status(400).json( {message: "Error occur (vote up)" + err} );
-            return res.status(200).json( {message: "Voted", votesLength: voted.length} );
+            return res.status(200).json( {message: "Voted", votesLength: voted.length + 1} );
         });
     } else {
         let voteFilter = voted.filter(v => v !== String(userId) && v !== '');

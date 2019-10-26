@@ -5,20 +5,16 @@ const crypto = require("crypto");
 
 module.exports.postSignup = (req, res) => {
     const { email, password } = req.body;
-    con.query(`SELECT id FROM users WHERE email='${email}'`, (err, result, fields) => {
+    let salt = Math.random().toString(36).slice(-8);
+    let hashed_password = crypto.createHmac("sha256", salt).update(password).digest("hex");
+    let query = `CALL postSignup ('${email}', '${salt}', '${hashed_password}')`;
+
+    con.query(query, (err, result) => {
+        console.log(err, result)
         if(err) {
             return res.status(400).json( {message: "Error occur"} )
-        } else if(result.length === 0) {
-            let salt = Math.random().toString(36).slice(-8);
-            let hashed_password = crypto.createHmac("sha256", salt).update(password).digest("hex");
-
-            con.query(`INSERT INTO users (email, salt, hashed_password) VALUES('${email}', '${salt}', '${hashed_password}')`, (err, result, fields) => {
-                return res.status(200).json( {message: "Ok"} );
-            });
-
-        } else {
-            return res.status(400).json( {message: "User with that email was exist"} )
         }
+        return res.status(200).json( {message: result[0][0].message} );
     })
 }
 
@@ -27,7 +23,7 @@ module.exports.postSignin = (req, res) => {
     let query   = "SELECT users.id, email, hashed_password, salt, fullname, photo, permission";
     query       += " FROM users, privileges"
     query       += " WHERE users.roles = privileges.id AND email='"+email+"'"
-    con.query(query, (err, user, fields) => {
+    con.query(query, (err, user) => {
         if(!err && user.length > 0) {
             let { salt, hashed_password, email, fullname, photo, permission } = user[0];
             let _id = user[0].id;

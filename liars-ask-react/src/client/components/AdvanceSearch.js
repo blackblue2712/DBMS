@@ -70,20 +70,20 @@ class AdvanceSearch extends Component {
                         </div>
                         <div className="form-group">
                             <label htmlFor="s-tags">Tags</label>
-                            <input type="text" id="s-tags" className="s-input s-input__search js-search-field w-100"/>
+                            <input type="text" id="s-tags" className="s-input s-input__search w-100"/>
                         </div>
                         <div className="form-group">
                             <label htmlFor="s-query">Query</label>
-                            <input type="text" id="s-query" className="s-input s-input__search js-search-field w-100"/>
+                            <input type="text" id="s-query" className="s-input s-input__search w-100"/>
                         </div>
 
                         <div className="form-group">
                             <label htmlFor="s-date-from">Date From</label>
-                            <input type="date" id="s-date-from" className="s-input s-input__search js-search-field w-100"/>
+                            <input type="date" id="s-date-from" className="s-input s-input__search w-100"/>
                         </div>
                         <div className="form-group">
                             <label htmlFor="s-date-to">Date To</label>
-                            <input type="date" id="s-date-to" className="s-input s-input__search js-search-field w-100"/>
+                            <input type="date" id="s-date-to" className="s-input s-input__search w-100"/>
                         </div>
 
                         <div className="form-group mt24">

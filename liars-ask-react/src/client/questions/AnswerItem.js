@@ -10,13 +10,12 @@ class AnswerItem extends React.Component {
         super();
         this.state = {
             count: 0,
-            active: '',
             isActive: ""
         }
     }
 
     componentDidMount() {
-        let voted = this.props.data.votes.split(" ");
+        let voted = this.props.data.votes.split(" ").filter( t => t !== "");
         let userId = isAuthenticated().user._id;
         let check = voted.indexOf(String(userId))
 
@@ -24,7 +23,7 @@ class AnswerItem extends React.Component {
             this.setState( {isActive: "active"} );
         }
 
-        this.setState( {count: voted.length - 1} );
+        this.setState( {count: voted.length} );
 
     }
 
@@ -36,16 +35,16 @@ class AnswerItem extends React.Component {
         .then( res => {
             console.log(res);
             if(res.message === "Voted") {
-                this.setState( {count: res.votesLength, active: "active"} );
+                this.setState( {count: res.votesLength, isActive: "active"} );
             } else if(res.message === "unVote") {
-                this.setState( {count: res.votesLength, active: ""} );
+                this.setState( {count: res.votesLength, isActive: ""} );
             }
 
         })
     }
     
     render() {
-        const { count, active, isActive } = this.state;
+        const { count, isActive } = this.state;
         const ans = this.props.data;   
         return (
             <div className="answer mt16 mb16">
@@ -56,7 +55,7 @@ class AnswerItem extends React.Component {
                                 className="js-vote--up"
                                 onClick={this.handleAnswerVoteUp}
                             >
-                                <svg aria-hidden="true" className={`svg-icon m0 iconArrowUpLg ${isActive} ${active}`} width="36" height="36" viewBox="0 0 36 36"><path d="M2 26h32L18 10 2 26z"></path></svg>
+                                <svg aria-hidden="true" className={`svg-icon m0 iconArrowUpLg ${isActive}`} width="36" height="36" viewBox="0 0 36 36"><path d="M2 26h32L18 10 2 26z"></path></svg>
                             </button>
                             <div className="vote-count">{count}</div>
                             <button className="js-vote--down">

@@ -15,27 +15,27 @@ module.exports.postAsk = (req, res) => {
 }
 
 module.exports.getQuestions = (req, res) => {
-    let query = "SELECT * FROM questions ORDER BY created DESC";
+    let query = "CALL getQuestions()";
     con.query(query, (err, ques ) => {
         if(err) return res.status(400).json( {message: "Error occur (get questions)"} );
-        return res.status(200).json( {message: `${ques.length} questions loaded`, payload: ques} );
+        return res.status(200).json( {message: `${ques[0].length} questions loaded`, payload: ques[0]} );
     })
 }
 
 module.exports.getYourQuestions = (req, res) => {
-    let query = `SELECT id, title FROM questions WHERE owner = ${req.query.userId}`;
+    let query = `CALL getYourQuestions(${req.query.userId})`;
     con.query(query, (err, ques) => {
         if(err) return res.status(400).json( {message: "Error occur"} );
-        return res.status(200).json(ques);
+        return res.status(200).json(ques[0]);
     })
 }
 
 
 module.exports.requestRelatedQuestionId = (req, res, next, id) => {
-    let query = `SELECT * FROM questions WHERE id = ${id}`;
+    let query = `CALL requestRelatedQuestionId(${Number(id)})`;
     con.query(query, (err, ques) => {
         if(err || !ques) return res.status(200).json( {message: "Error occur (get single question)"} );
-        req.quesInfo = ques[0];
+        req.quesInfo = ques[0][0];
         next();
     })
 }
@@ -114,7 +114,7 @@ module.exports.getAnswers = (req, res) => {
 
 module.exports.deleteQuestion = (req, res) => {
     let id = req.query.id;
-    let query = `DELETE FROM questions WHERE id = ${Number(id)}`;
+    let query = `CALL deleteQuestion(${Number(id)})`;
     con.query(query, (err, result) => {
         if(err) return res.status(400).json( {message: "Error occur (delete ques)"} )
         return res.status(200).json( {message: "Done"} );
