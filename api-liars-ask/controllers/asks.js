@@ -1,20 +1,50 @@
 const { addslashes } = require("../helper/helper");
 
 
-module.exports.postAsk = (req, res) => {
+module.exports.postAsk = async (req, res) => {
     let { title, body, tagsnameArray, owner } = req.body;
+    let insertedId = [];
+    let getIdTag = (tag) => {
+        return new Promise(resolve => {
+            con.query(`SELECT CheckAndAddUnExistsTag('${tag}') AS insertedId`, (err, result) => {
+                if(!err) insertedId.push(result[0].insertedId);
+                resolve();
+            })
+        })
+    }
     
-    // let query = `INSERT INTO questions (title, body, anonymousTags, owner) VALUES ('${addslashes(title)}', '${addslashes(body)}', '${JSON.stringify(tagsnameArray)}', ${owner})`;
-    let query = `CALL AddAQuestion('${addslashes(title)}', '${addslashes(body)}', '${JSON.stringify(tagsnameArray)}', ${Number(owner)})`;
-    console.log(query)
-    con.query(query, (err, result) => {
-        console.log(err)
-        if(err) return res.status(400).json( {message: "Error occur (ask question)"} );
-        return res.status(200).json( {message: "Done"} )
-    });
+    Promise.all(
+        tagsnameArray.map( async tag => {
+            await getIdTag(tag)
+        })
+    ).then( () => {
+        console.log(1, insertedId)
+        let query = `SELECT AddAQuestionAfterAddTags('${addslashes(title)}', '${addslashes(body)}', '${JSON.stringify(tagsnameArray)}', ${Number(owner)}) AS insertedQuestionId`;
+        console.log(2, query)
+        con.query(query, (err, ques) => {
+            let insertedQuestionId = ques[0].insertedQuestionId;
+            console.log(3, ques[0])
+            let subQuery = ""
+            insertedId.map( (tag, i) => {
+                subQuery += `('questions', '${tag}', '${insertedQuestionId}'), `;
+            });
+            subQuery = subQuery.substr(0, subQuery.length -2);
+            let queryInsertTagsRelationShips = `INSERT INTO tags_relationships (type, tagId, typeId) VALUES ${subQuery}`;
+            console.log(4, queryInsertTagsRelationShips)
+            con.query(queryInsertTagsRelationShips, (err, result) => {
+                if(err) return res.status(400).json( {message: "Error occur (ask question)"} );
+                return res.status(200).json( {message: "Done"} )
+            });
+        })
+    })
 }
 
 module.exports.getQuestions = (req, res) => {
+    // var os = require( 'os' );
+    // var networkInterfaces = os.networkInterfaces( );
+    // console.log( networkInterfaces );
+
+
     let query = "CALL getQuestions()";
     con.query(query, (err, ques ) => {
         if(err) return res.status(400).json( {message: "Error occur (get questions)"} );
@@ -45,9 +75,11 @@ module.exports.getSigleQuestion = (req, res) => {
     if(req.quesInfo.answers !== null) {
         console.log(req.quesInfo.answers)
         let ids = JSON.parse(req.quesInfo.answers).filter( i => i !== null).join(",");
-        let query = `SELECT * FROM answers WHERE id IN (${ids})`;
+        let query = `SELECT answers.id, body, owner, votes, created, users.email, users.fullname, users.photo FROM answers, users WHERE answers.owner = users.id AND answers.id IN (${ids})`;
+        console.log(query)
         con.query(query, (err, ans) => {
             req.quesInfo.answers = ans;
+            
             // if(err || !ans) return res.status(200).json( {message: "Error occur (get single question)"} );
             // let query = `SELECT id, photo, email, fullname FROM users WHERE id = ${ids}`;
             return res.status(200).json(req.quesInfo);
@@ -60,10 +92,8 @@ module.exports.getSigleQuestion = (req, res) => {
 module.exports.postAnswer = (req, res, next) => {
     let { body, userId, email, fullname, photo } = req.body;
     fullname = fullname === null ? " " : fullname;
-    // let query = `INSERT INTO answers (body, owner, email, photo, fullname) VALUES('${addslashes(body)}', ${userId}, '${addslashes(email)}', '${addslashes(photo)}', '${addslashes(fullname)}')`;
     let query = `SELECT AddAnAnswer ('${addslashes(body)}', ${Number(userId)}, '${addslashes(email)}', '${addslashes(photo)}', '${addslashes(fullname)}') AS insertedId`
     con.query(query, (err, result, fields) => {
-        console.log(result[0])
         if(err) return res.status(400).json( {message: "Error occur (add answer)"} );
         req.answerId = result[0].insertedId;
         next();
