@@ -1,36 +1,24 @@
-const { addslashes } = require("../helper/helper");
+const { addslashes, getIdTag } = require("../helper/helper");
 
 
 module.exports.postAsk = async (req, res) => {
     let { title, body, tagsnameArray, owner } = req.body;
     let insertedId = [];
-    let getIdTag = (tag) => {
-        return new Promise(resolve => {
-            con.query(`SELECT CheckAndAddUnExistsTag('${tag}') AS insertedId`, (err, result) => {
-                if(!err) insertedId.push(result[0].insertedId);
-                resolve();
-            })
-        })
-    }
     
     Promise.all(
         tagsnameArray.map( async tag => {
             await getIdTag(tag)
         })
     ).then( () => {
-        console.log(1, insertedId)
         let query = `SELECT AddAQuestionAfterAddTags('${addslashes(title)}', '${addslashes(body)}', '${JSON.stringify(tagsnameArray)}', ${Number(owner)}) AS insertedQuestionId`;
-        console.log(2, query)
         con.query(query, (err, ques) => {
             let insertedQuestionId = ques[0].insertedQuestionId;
-            console.log(3, ques[0])
             let subQuery = ""
             insertedId.map( (tag, i) => {
                 subQuery += `('questions', '${tag}', '${insertedQuestionId}'), `;
             });
             subQuery = subQuery.substr(0, subQuery.length -2);
             let queryInsertTagsRelationShips = `INSERT INTO tags_relationships (type, tagId, typeId) VALUES ${subQuery}`;
-            console.log(4, queryInsertTagsRelationShips)
             con.query(queryInsertTagsRelationShips, (err, result) => {
                 if(err) return res.status(400).json( {message: "Error occur (ask question)"} );
                 return res.status(200).json( {message: "Done"} )
@@ -48,7 +36,7 @@ module.exports.getQuestions = (req, res) => {
     let query = "CALL getQuestions()";
     con.query(query, (err, ques ) => {
         if(err) return res.status(400).json( {message: "Error occur (get questions)"} );
-        return res.status(200).json( {message: `${ques[0].length} questions loaded`, payload: ques[0]} );
+        return res.status(200).json( {message: `${ques[0].length} questions loaded`, payload: ques[0], tags: ques[1]} );
     })
 }
 
@@ -66,17 +54,15 @@ module.exports.requestRelatedQuestionId = (req, res, next, id) => {
     con.query(query, (err, ques) => {
         if(err || !ques) return res.status(200).json( {message: "Error occur (get single question)"} );
         req.quesInfo = ques[0][0];
+        req.quesInfo.quesTags = ques[1];
         next();
     })
 }
 
 module.exports.getSigleQuestion = (req, res) => {
-    
     if(req.quesInfo.answers !== null) {
-        console.log(req.quesInfo.answers)
         let ids = JSON.parse(req.quesInfo.answers).filter( i => i !== null).join(",");
         let query = `SELECT answers.id, body, owner, votes, created, users.email, users.fullname, users.photo FROM answers, users WHERE answers.owner = users.id AND answers.id IN (${ids})`;
-        console.log(query)
         con.query(query, (err, ans) => {
             req.quesInfo.answers = ans;
             
@@ -124,18 +110,67 @@ module.exports.updateQuestionAfterPostAnswer = (req, res) => {
 module.exports.putUpdateQuestion = (req, res) => {
     let ques = req.quesInfo;
     let { title, body, tagsnameArray } = req.body;
-    let query = "";
+    let insertedId = []
     
-    if(body) {
-        query = `UPDATE questions SET title = '${addslashes(title)}', anonymousTags = '${JSON.stringify(tagsnameArray)}', body = '${addslashes(body)}' WHERE id = ${ques.id}`;
-    } else {
-        query = `UPDATE questions SET title = '${addslashes(title)}', anonymousTags = '${JSON.stringify(tagsnameArray)}' WHERE id = ${ques.id}`;
-    }
+    // 
+    Promise.all(
+        tagsnameArray.map( async tag => {
+            let data = await getIdTag(tag);
+            insertedId = [...insertedId, ...data]
+        })
+    ).then( () => {
+        let tagsRelationshipsNeedToDelete = [];
+        let tagsRelationshipsExists = [];
+        ques.quesTags.filter( tag => {
+            if(tagsnameArray.indexOf(tag.tagName) === -1) {
+                tagsRelationshipsNeedToDelete.push(tag.id);
+            } else {
+                tagsRelationshipsExists.push(tag.tagId);
+            }
+        })
+        let tagsRelationshipsNeedToInsert = insertedId.filter( tag => {
+            return tagsRelationshipsExists.indexOf(tag) === -1;
+        })
+        console.log(tagsRelationshipsNeedToDelete);
+        console.log(tagsRelationshipsExists);
+        console.log(tagsRelationshipsNeedToInsert);
+        let subQuery = ""
+        tagsRelationshipsNeedToInsert.map( tag => {
+            subQuery += `('questions', '${tag}', '${ques.id}'), `;
+        });
+        subQuery = subQuery.substr(0, subQuery.length -2);
 
-    con.query(query, (err, result) => {
-        if(err) return res.status(400).json( {message: "Error occur (edit blog)"} )
-        return res.status(200).json( {message: "Done"} );
+
+        let query = "";
+    
+        if(body) {
+            query = `UPDATE questions SET title = '${addslashes(title)}', anonymousTags = '${JSON.stringify(tagsnameArray)}', body = '${addslashes(body)}' WHERE id = ${ques.id}`;
+        } else {
+            query = `UPDATE questions SET title = '${addslashes(title)}', anonymousTags = '${JSON.stringify(tagsnameArray)}' WHERE id = ${ques.id}`;
+        }
+    
+        con.query(query, (err, result) => {
+            if(err) return res.status(400).json( {message: "Error occur (edit blog)"} )
+            else {
+                if(tagsRelationshipsNeedToInsert.length > 0) {
+                    let queryInsertTagsRelationShips = `INSERT INTO tags_relationships (type, tagId, typeId) VALUES ${subQuery}`;
+                    con.query(queryInsertTagsRelationShips, (err, result) => {
+
+                    });
+                }
+                if(tagsRelationshipsNeedToDelete.length > 0) {
+                    let queryDeleteTagsRelationShips = `DELETE FROM tags_relationships WHERE id IN (${tagsRelationshipsNeedToDelete.join(",")})`;
+                    con.query(queryDeleteTagsRelationShips, (err, result) => {
+
+                    });
+                }
+                return res.status(200).json( {message: "Done"} );
+            }
+        })
     })
+
+
+   
 }
 
 module.exports.getAnswers = (req, res) => {

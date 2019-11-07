@@ -8,3 +8,13 @@ module.exports.addslashes = (string) => {
         replace(/'/g, '\\\'').
         replace(/"/g, '\\"');
 }
+
+module.exports.getIdTag = (tag) => {
+    return new Promise(resolve => {
+        let insertedId = [];
+        con.query(`SELECT CheckAndAddUnExistsTag('${tag}') AS insertedId`, (err, result) => {
+            if(!err) insertedId.push(result[0].insertedId);
+            resolve(insertedId);
+        })
+    })
+}

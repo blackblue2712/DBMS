@@ -80,6 +80,7 @@ class EditQuestion extends React.Component {
         try {
             getSingleQuestion(this.props.match.params.quesId)
             .then( res => {
+                console.log(res)
                 if(res.message) {
                     this.props.history.push("/404");
                 } else {

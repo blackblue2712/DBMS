@@ -7,20 +7,26 @@ class Questions extends React.Component {
     constructor() {
         super();
         this.state = {
-            questions: []
+            questions: [],
+            tags: []
         }
     }
 
     componentDidMount() {
         getQuestions()
         .then( res => {
-            this.setState( {questions: res.payload} )
+            this.setState( {questions: res.payload, tags: res.tags} )
         })
     }
 
     render() {
-        const { questions } = this.state;
-        // console.log(questions)
+        const { questions, tags } = this.state;
+        questions.map( ques => {
+            ques.tags = [];
+            tags.map( tag => {
+                if(tag.typeId === ques.id) ques.tags.push(tag)
+            })
+        })
         return (
             <div id="content">
                 <div className="main-head">

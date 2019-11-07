@@ -39,8 +39,8 @@ class Post extends Component {
                         <ReactMarkdown source={ques.body} renderers={{ code: CodeBlock }} />
                     </div>
                     {
-                        ques.anonymousTags && JSON.parse(ques.anonymousTags).map( (tag,i) => {
-                            return <Tags key={i} name={tag}/>
+                        ques.quesTags && ques.quesTags.map( (tag,i) => {
+                            return <Tags key={i} name={tag.tagName}/>
                         })
                     }
                 </div>

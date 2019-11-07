@@ -42,8 +42,8 @@ class ListItem extends Component {
                         {body.length > 200 ? body.slice(0, 200) + "..." : body}
                     </div>
                     {
-                        tags && JSON.parse(tags).map( (t, i) => {
-                            return <Tags key={i} name={t}/>
+                        tags && tags.map( (t, i) => {
+                            return <Tags key={i} name={t.name}/>
                         })
                     }
                     {/* <div className="started ml-auto" dir="ltr">
