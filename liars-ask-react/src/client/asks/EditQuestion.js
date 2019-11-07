@@ -84,7 +84,7 @@ class EditQuestion extends React.Component {
                 if(res.message) {
                     this.props.history.push("/404");
                 } else {
-                    this.setState( { title: res.title, body: res.body, id: res.id, tagDom: JSON.parse(res.anonymousTags).join(" ")} );
+                    this.setState( { title: res.title, body: res.body, id: res.id, tagDom: res.quesTags.join(" ")} );
                     document.getElementById("tagsname").value = this.state.tagDom;
                 }
                 

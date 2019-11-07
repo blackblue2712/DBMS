@@ -7,10 +7,11 @@ module.exports.postAsk = async (req, res) => {
     
     Promise.all(
         tagsnameArray.map( async tag => {
-            await getIdTag(tag)
+            let data = await getIdTag(tag);
+            insertedId = [...insertedId, ...data];
         })
     ).then( () => {
-        let query = `SELECT AddAQuestionAfterAddTags('${addslashes(title)}', '${addslashes(body)}', '${JSON.stringify(tagsnameArray)}', ${Number(owner)}) AS insertedQuestionId`;
+        let query = `SELECT AddAQuestionAfterAddTags('${addslashes(title)}', '${addslashes(body)}', ${Number(owner)}) AS insertedQuestionId`;
         con.query(query, (err, ques) => {
             let insertedQuestionId = ques[0].insertedQuestionId;
             let subQuery = ""
@@ -144,9 +145,9 @@ module.exports.putUpdateQuestion = (req, res) => {
         let query = "";
     
         if(body) {
-            query = `UPDATE questions SET title = '${addslashes(title)}', anonymousTags = '${JSON.stringify(tagsnameArray)}', body = '${addslashes(body)}' WHERE id = ${ques.id}`;
+            query = `UPDATE questions SET title = '${addslashes(title)}', body = '${addslashes(body)}' WHERE id = ${ques.id}`;
         } else {
-            query = `UPDATE questions SET title = '${addslashes(title)}', anonymousTags = '${JSON.stringify(tagsnameArray)}' WHERE id = ${ques.id}`;
+            query = `UPDATE questions SET title = '${addslashes(title)}' WHERE id = ${ques.id}`;
         }
     
         con.query(query, (err, result) => {
