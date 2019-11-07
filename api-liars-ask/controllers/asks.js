@@ -77,9 +77,8 @@ module.exports.getSigleQuestion = (req, res) => {
 }
 
 module.exports.postAnswer = (req, res, next) => {
-    let { body, userId, email, fullname, photo } = req.body;
-    fullname = fullname === null ? " " : fullname;
-    let query = `SELECT AddAnAnswer ('${addslashes(body)}', ${Number(userId)}, '${addslashes(email)}', '${addslashes(photo)}', '${addslashes(fullname)}') AS insertedId`
+    let { body, userId } = req.body;
+    let query = `SELECT AddAnAnswer ('${addslashes(body)}', ${Number(userId)}) AS insertedId`
     con.query(query, (err, result, fields) => {
         if(err) return res.status(400).json( {message: "Error occur (add answer)"} );
         req.answerId = result[0].insertedId;

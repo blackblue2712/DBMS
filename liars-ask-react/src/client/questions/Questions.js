@@ -15,6 +15,7 @@ class Questions extends React.Component {
     componentDidMount() {
         getQuestions()
         .then( res => {
+            console.log(res)
             this.setState( {questions: res.payload, tags: res.tags} )
         })
     }

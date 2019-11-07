@@ -23,7 +23,7 @@ class YourAnswer extends React.Component {
             let token  = isAuthenticated().token;
             let quesId = this.props.match.params.quesId;
 
-            postAnswer( {body, userId, quesId, email, photo, fullname}, token )
+            postAnswer( {body, userId, quesId}, token )
             .then( res => {
                 this.setState( {message: res.message} );
                 if(res.message === "Your answer added") {
@@ -35,6 +35,7 @@ class YourAnswer extends React.Component {
                         id: userId,
                         email,
                         photo,
+                        fullname,
                         votes: '[]'
                     })
                 }
