@@ -42,6 +42,7 @@ class SingleBlog extends React.Component {
 
     render() {
         const { blog } = this.state;
+        console.log(blog)
         return (
             <div id="content">
                 <div id="mainbar">
@@ -57,8 +58,8 @@ class SingleBlog extends React.Component {
                         <ReactMarkdown source={blog.body} renderers={{ code: CodeBlock }} />
                         
                         {
-                            blog.anonymousTags && JSON.parse(blog.anonymousTags).map( (tag,i) => {
-                                return <Tags key={i} name={tag}/>
+                            blog.blogTags && blog.blogTags.map( (tag,i) => {
+                                return <Tags key={i} name={tag.tagName}/>
                             })
                         }
                     </div>

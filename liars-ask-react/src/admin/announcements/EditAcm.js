@@ -79,7 +79,8 @@ class EditAcm extends React.Component {
         getSingleAnnouncement(this.props.match.params.acmId)
         .then( res => {
             if(!res.message) {
-                this.setState( {acm: res, title: res.title, body: res.body, id: res.id, isImportant: res.isImportant, tagDom: JSON.parse(res.anonymousTags).join(" ")} );
+                let tagsName = res.acmTags.map( tag => tag.tagName);
+                this.setState( {acm: res, title: res.title, body: res.body, id: res.id, isImportant: res.isImportant, tagDom: tagsName.join(" ")} );
                 document.getElementById("tagsname").value = this.state.tagDom;
                 if(res.isImportant) {
                     document.getElementById("is-important").checked = true;

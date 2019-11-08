@@ -9,7 +9,8 @@ class Announcements extends Component {
         super();
         this.state = {
             acms: [],
-            message: ""
+            message: "",
+            tags: []
         }
     }
 
@@ -22,7 +23,7 @@ class Announcements extends Component {
             getAnnouncements()
             .then( res => {
                 if(res.payload) {
-                    this.setState( {acms: res.payload, message: res.message} );
+                    this.setState( {acms: res.payload, message: res.message, tags: res.tags} );
                 } else {
                     this.setState( {message: res.message} );
                 }
@@ -38,8 +39,13 @@ class Announcements extends Component {
     }
 
     render() {
-        const { message, acms } = this.state;
-        console.log(acms)
+        const { message, acms, tags } = this.state;
+        acms.map( acm => {
+            acm.tags = [];
+            tags.map( tag => {
+                if(tag.typeId === acm.id) acm.tags.push(tag)
+            })
+        })
         return (
             <>
                 <div className="main-head">

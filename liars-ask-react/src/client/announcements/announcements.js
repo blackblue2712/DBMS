@@ -19,6 +19,7 @@ class Announcement extends React.Component {
         super();
         this.state = {
             acms: [],
+            tags: [],
             message: ""
         }
     }
@@ -31,7 +32,7 @@ class Announcement extends React.Component {
         getAnnouncements()
         .then( res => {
             if(res.payload) {
-                this.setState( {acms: res.payload, message: res.message} );
+                this.setState( {acms: res.payload, tags: res.tags, message: res.message} );
             } else {
                 this.setState( {message: res.message} );
             }
@@ -43,7 +44,13 @@ class Announcement extends React.Component {
     }
 
     render() {
-        const { message, acms } = this.state;
+        const { message, acms, tags } = this.state;
+        acms.map( acm => {
+            acm.tags = [];
+            tags.map( tag => {
+                if(tag.typeId === acm.id) acm.tags.push(tag)
+            })
+        })
         return (
             <div id="content">
                 <div id="mainbar">

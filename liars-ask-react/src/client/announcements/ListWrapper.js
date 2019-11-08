@@ -13,7 +13,7 @@ const ListWrapper = props => {
             <div className="mini-list">
                 {
                     acms && acms.map( (acm, i) => {
-                        return <ListItem key={i} title={acm.title} body={acm.body} tags={acm.anonymousTags} isImportant={acm.isImportant} id={acm.id} /> 
+                        return <ListItem key={i} title={acm.title} body={acm.body} tags={acm.tags} isImportant={acm.isImportant} id={acm.id} /> 
                     })
                 }
             </div>

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Tags from '../components/Tags';
 import ReactMarkdown from 'react-markdown';
 import CodeBlock from '../editor/CodeBlock';
-import Code from 'react-code-prettify';
 class Post extends Component {
     constructor() {
         super();

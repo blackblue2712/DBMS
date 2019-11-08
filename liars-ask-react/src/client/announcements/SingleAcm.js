@@ -2,6 +2,7 @@ import React from 'react';
 import { getSingleAnnouncement } from '../../controllers/announcementController';
 import ReactMarkdown from 'react-markdown';
 import CodeBlock from '../editor/CodeBlock';
+import Tags from '../components/Tags';
 class SingleAcm extends React.Component {
     constructor() {
         super();
@@ -37,6 +38,12 @@ class SingleAcm extends React.Component {
 
                     <div className="bg-white bar-sm bs-md p16 md-content">
                         <ReactMarkdown source={acm.body} renderers={{ code: CodeBlock }} />
+
+                        {
+                            acm.acmTags && acm.acmTags.map( (tag,i) => {
+                                return <Tags key={i} name={tag.tagName}/>
+                            })
+                        }
                     </div>
 
                     <div className="clear-fix"></div>
