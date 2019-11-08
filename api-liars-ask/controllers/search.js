@@ -12,28 +12,41 @@ module.exports.onSearchQuestions = (req, res) => {
 
 module.exports.onAdvanceSerach = (req, res) => {
     let { category, tags, query, dateFrom, dateTo } = req.body;
-
-    let querySearch = `SELECT id, title, anonymousTags FROM ${String(addslashes(category))} WHERE title LIKE '%${addslashes(query)}%' AND created > '${addslashes(dateFrom)}' `;
-    if(dateTo !== "") {
-        querySearch += ` AND created < '${addslashes(dateTo)}'`;
+    dateTo = dateTo === "" ? new Date().toJSON() : dateTo;
+    let querySearch = "";
+    let tagsString = tags.split(" ").map( tag => {
+        return `"${tag}"`;
+    })
+    switch (category) {
+        case "blogs":
+            querySearch = `CALL AdvanceSearchBlogs('%${query}%', '${tags.split(" ").join(",")}', '${dateFrom}', '${dateTo}')`;
+            break;
+        case "questions":
+            querySearch = `CALL AdvanceSearchQuestions('%${query}%', '${tags.split(" ").join(",")}', '${dateFrom}', '${dateTo}')`;
+            break;
+        case "announcements":
+            querySearch = `CALL AdvanceSearchAnnouncements('%${query}%', '${tags.split(" ").join(",")}', '${dateFrom}', '${dateTo}')`;
+            break;
+        default:
+            break;
     }
 
+    console.log(querySearch)
+    
     con.query(querySearch, (err, result) => {
+        console.log(result)
         if(err) return res.status(400).json( {message: "Error occur (search advance)"} );
-        // let resHL = result.map( d => {
-        //     return d.title.replace(query, "<b>"+query+"</b>");
-        // })
-        let resFilter = result;
-        if(tags) {
-            let arrTags = tags.split(" ");
-            arrTags.map( tagCheck => {
-                resFilter = result.filter( d => {
-                    let HOLY_SHIT_I_HAVE_NO_IDEA_TO_NAME_THIS_VARIABLE = JSON.parse(d.anonymousTags);
-                    return HOLY_SHIT_I_HAVE_NO_IDEA_TO_NAME_THIS_VARIABLE.indexOf(tagCheck) > -1;
-                })
-            })
-        }
+        // let resFilter = result;
+        // if(tags) {
+        //     let arrTags = tags.split(" ");
+        //     arrTags.map( tagCheck => {
+        //         resFilter = result.filter( d => {
+        //             let HOLY_SHIT_I_HAVE_NO_IDEA_TO_NAME_THIS_VARIABLE = JSON.parse(d.anonymousTags);
+        //             return HOLY_SHIT_I_HAVE_NO_IDEA_TO_NAME_THIS_VARIABLE.indexOf(tagCheck) > -1;
+        //         })
+        //     })
+        // }
         
-        return res.status(200).json( resFilter )
+        return res.status(200).json( result[0] )
     })
 }
