@@ -80,10 +80,12 @@ class EditAcm extends React.Component {
         try {
             getSingleBlog(this.props.match.params.blogId)
             .then( res => {
+                console.log(res)
                 if(res.message) {
                     this.props.history.push("/404");
                 } else {
-                    this.setState( { title: res.title, body: res.body, id: res.id, tagDom: JSON.parse(res.anonymousTags).join(" ")} );
+                    let tagsName = res.blogTags.map( tag => tag.tagName);
+                    this.setState( { title: res.title, body: res.body, id: res.id, tagDom: tagsName.join(" ")} );
                     document.getElementById("tagsname").value = this.state.tagDom;
                 }
                 

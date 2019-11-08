@@ -11,7 +11,6 @@ class ListItem extends Component {
 
     render() {
         const { title, body, tags, id } = this.props;
-        console.log(tags);
         return (
             <div className={`item-list narrow d-flex`}>
                 <div className="cp d-flex">
@@ -44,8 +43,8 @@ class ListItem extends Component {
                         }
                     </div>
                     {
-                        tags && JSON.parse(tags).map( (t, i) => {
-                            return <Tags key={i} name={t}/>
+                        tags && tags.map( (t, i) => {
+                            return <Tags key={i} name={t.name}/>
                         })
                     }
                     {/* <div className="started ml-auto" dir="ltr">

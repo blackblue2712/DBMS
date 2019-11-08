@@ -8,20 +8,30 @@ class Blogs extends React.Component {
     constructor() {
         super();
         this.state = {
-            blogs: []
+            blogs: [],
+            tags: [],
         }
     }
 
     componentDidMount() {
-        getAllBlogs()
-        .then( res => {
-            console.log(res)
-            this.setState( {blogs: res} )
-        })
+        try {
+            getAllBlogs()
+            .then( res => {
+                this.setState( { blogs: res.payload, tags: res.tags } )
+            })
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     render() {
-        const { blogs } = this.state;
+        const { blogs, tags } = this.state;
+        blogs.map( blog => {
+            blog.tags = [];
+            tags.map( tag => {
+                if(tag.typeId === blog.id) blog.tags.push(tag)
+            })
+        })
         return (
             <div id="content">
                 <div className="main-head">

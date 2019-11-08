@@ -8,7 +8,7 @@ const SidebarWidget = props => {
     useEffect( () => {
         getBlogs()
         .then( res => {
-            setBlogs(res);
+            setBlogs(res[0]);
         })
     }, [blogs.length]);
 

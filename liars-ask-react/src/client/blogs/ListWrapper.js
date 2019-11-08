@@ -13,7 +13,7 @@ const ListWrapper = props => {
             <div className="mini-list">
                 {
                     blogs && blogs.map( (blog, i) => {
-                        return <ListItem key={i} title={blog.title} body={blog.body} tags={blog.anonymousTags} id={blog.id} /> 
+                        return <ListItem key={i} title={blog.title} body={blog.body} tags={blog.tags} id={blog.id} /> 
                     })
                 }
             </div>
