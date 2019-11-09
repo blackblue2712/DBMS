@@ -45,6 +45,7 @@ module.exports.getBlogs = (req, res) => {
 module.exports.getAllBlogs = (req, res) => {
     let query = "CALL getBlogs()";
     con.query(query, (err, blogs) => {
+        console.log(err)
         if(err) return res.status(400).json( {message: "Error occur (get all blogs) " + err} );
         return res.status(200).json( { payload: blogs[0], tags: blogs[1] } );
     });

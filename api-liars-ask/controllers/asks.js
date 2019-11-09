@@ -85,6 +85,7 @@ module.exports.postAnswer = (req, res) => {
     let { body, userId, quesId } = req.body;
     let query = `SELECT AddAnAnswer ('${addslashes(body)}', ${Number(userId)}, ${Number(quesId)}) AS insertedId`
     con.query(query, (err, result, fields) => {
+        console.log(err)
         if(err) return res.status(400).json( {message: "Error occur (add answer)"} );
         return res.status(200).json( {message: "Your answer added"} );
     })
@@ -192,18 +193,9 @@ module.exports.deleteQuestion = (req, res) => {
 
 module.exports.deleteAnswersRelatedQuestion = (req, res, next) => {
     let idQues = req.query.id;
-    let query = `SELECT answers FROM questions WHERE id = ${Number(idQues)}`;
-    con.query(query, (err, result) => {
-        if(err) return res.status(400).json( {message: "Error occur (select ans to delete)"} )
-        if(result[0].answers) {
-            let answer = JSON.parse(result[0].answers);
-            let queryDelete = `DELETE FROM answers WHERE id IN (${answer.join(",")})`;
-            con.query(queryDelete, (err, result) => {
-                if(err) return res.status(400).json( {message: "Error occur (delete ans)"} )
-                next();
-            })
-        } else {
-            next();
-        }
-    });
+    let queryDelete = `DELETE FROM answers WHERE quesId = (${Number(idQues)})`;
+    con.query(queryDelete, (err, result) => {
+        if(err) return res.status(400).json( {message: "Error occur (delete ans)"} )
+        next();
+    })
 }

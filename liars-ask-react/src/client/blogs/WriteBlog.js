@@ -18,7 +18,10 @@ class WriteBlog extends React.Component {
     }
 
     handleWriteBlog = () => {
+        let btnLoading = document.getElementById("wrap-btn-loading");
         try {
+            btnLoading.classList.add("btn-loading");
+
             let token = isAuthenticated().token;
             let owner = isAuthenticated().user._id;
             let editor = document.querySelector("textarea.mde-text");
@@ -43,8 +46,9 @@ class WriteBlog extends React.Component {
             } else {
                 alert("Please turn to write mode")
             }
-
+            btnLoading.classList.remove("btn-loading");
         } catch (err) {
+            btnLoading.classList.remove("btn-loading");
             this.setState( {message: "Error try catch"} );
             console.log(err);
         }
