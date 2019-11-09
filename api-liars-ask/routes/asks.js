@@ -11,7 +11,6 @@ const {
     requestRelatedQuestionId,
     getSigleQuestion,
     postAnswer,
-    updateQuestionAfterPostAnswer,
     getYourQuestions,
     putUpdateQuestion,
     deleteAnswersRelatedQuestion,
@@ -23,7 +22,7 @@ router.get("/questions/:quesId", getSigleQuestion);
 router.put("/questions/edit/:quesId", putUpdateQuestion);
 router.get("/your-questions/", getYourQuestions);
 router.post("/new", requireSignin, postAsk);
-router.post("/answer/new", requireSignin, postAnswer, updateQuestionAfterPostAnswer);
+router.post("/answer/new", requireSignin, postAnswer);
 router.delete("/delete", requireSignin, deleteAnswersRelatedQuestion, deleteQuestion);
 
 

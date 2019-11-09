@@ -63,8 +63,12 @@ module.exports.requestRelatedQuestionId = (req, res, next, id) => {
 
 module.exports.getSigleQuestion = (req, res) => {
     if(req.quesInfo.answers !== null) {
-        let ids = JSON.parse(req.quesInfo.answers).filter( i => i !== null).join(",");
-        let query = `SELECT answers.id, body, owner, votes, created, users.email, users.fullname, users.photo FROM answers, users WHERE answers.owner = users.id AND answers.id IN (${ids})`;
+        let query = `
+            SELECT DISTINCT answers.id, answers.body, answers.owner, answers.votes, answers.created, users.email, users.fullname, users.photo
+            FROM answers, users, questions
+            WHERE answers.owner = users.id
+            AND answers.quesId = ${req.quesInfo.id}
+        `;
         con.query(query, (err, ans) => {
             req.quesInfo.answers = ans;
             
@@ -77,36 +81,35 @@ module.exports.getSigleQuestion = (req, res) => {
     }
 }
 
-module.exports.postAnswer = (req, res, next) => {
-    let { body, userId } = req.body;
-    let query = `SELECT AddAnAnswer ('${addslashes(body)}', ${Number(userId)}) AS insertedId`
+module.exports.postAnswer = (req, res) => {
+    let { body, userId, quesId } = req.body;
+    let query = `SELECT AddAnAnswer ('${addslashes(body)}', ${Number(userId)}, ${Number(quesId)}) AS insertedId`
     con.query(query, (err, result, fields) => {
         if(err) return res.status(400).json( {message: "Error occur (add answer)"} );
-        req.answerId = result[0].insertedId;
-        next();
+        return res.status(200).json( {message: "Your answer added"} );
     })
 }
 
-module.exports.updateQuestionAfterPostAnswer = (req, res) => {
-    let { quesId } = req.body;
+// module.exports.updateQuestionAfterPostAnswer = (req, res) => {
+//     let { quesId } = req.body;
 
-    let querySelect = `SELECT answers FROM questions WHERE id=${quesId}`;
-    con.query(querySelect, (err, result) => {
-        if(err) return res.status(400).json( {message: "Error occur (select answers)"} );
-        let answered = [];
-        if(result[0].answers !== null) {
-            answered = JSON.parse(result[0].answers);
-        }
-        answered.push(req.answerId);
+//     let querySelect = `SELECT answers FROM questions WHERE id=${quesId}`;
+//     con.query(querySelect, (err, result) => {
+//         if(err) return res.status(400).json( {message: "Error occur (select answers)"} );
+//         let answered = [];
+//         if(result[0].answers !== null) {
+//             answered = JSON.parse(result[0].answers);
+//         }
+//         answered.push(req.answerId);
 
-        let queryUpdate = `UPDATE questions SET answers = '${JSON.stringify(answered)}' WHERE id = ${quesId}`;
-        con.query(queryUpdate, (err, result) => {
-            if(err) return res.status(400).json( {message: "Error occur (push answer)"} );
-            return res.status(200).json( {message: "Your answer added"} );
-        })
+//         let queryUpdate = `UPDATE questions SET answers = '${JSON.stringify(answered)}' WHERE id = ${quesId}`;
+//         con.query(queryUpdate, (err, result) => {
+//             if(err) return res.status(400).json( {message: "Error occur (push answer)"} );
+//             return res.status(200).json( {message: "Your answer added"} );
+//         })
 
-    })
-}
+//     })
+// }
 
 module.exports.putUpdateQuestion = (req, res) => {
     let ques = req.quesInfo;
