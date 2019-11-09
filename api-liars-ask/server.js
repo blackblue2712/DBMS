@@ -21,6 +21,13 @@ con = mysql.createConnection({
     password: "",
     database: "liars-ask"
 });
+// con = mysql.createConnection({
+//     host: "db4free.net",
+//     user: "liars_ask123",
+//     password: "9Hj6@hq2",
+//     database: "liars_ask123",
+//     port: 3306
+// });
   
 con.connect(function(err) {
     if (err) throw err;

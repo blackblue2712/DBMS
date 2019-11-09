@@ -13,6 +13,7 @@ module.exports.postAsk = async (req, res) => {
     ).then( () => {
         let query = `SELECT AddAQuestionAfterAddTags('${addslashes(title)}', '${addslashes(body)}', ${Number(owner)}) AS insertedQuestionId`;
         con.query(query, (err, ques) => {
+            console.log(err)
             let insertedQuestionId = ques[0].insertedQuestionId;
             let subQuery = ""
             insertedId.map( (tag, i) => {

@@ -45,9 +45,9 @@ module.exports.onAdvanceSerach = (req, res) => {
     `
 
     console.log(querySearch)
+
     
     con.query(querySearch, (err, result) => {
-        console.log(result)
         if(err) return res.status(400).json( {message: "Error occur (search advance)"} );
         // let resFilter = result;
         // if(tags) {
