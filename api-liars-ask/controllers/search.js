@@ -14,22 +14,35 @@ module.exports.onAdvanceSerach = (req, res) => {
     let { category, tags, query, dateFrom, dateTo } = req.body;
     dateTo = dateTo === "" ? new Date().toJSON() : dateTo;
     let querySearch = "";
-    let tagsString = tags.split(" ").map( tag => {
+    let tagsString = tags.trim().split(" ").map( tag => {
         return `"${tag}"`;
-    })
-    switch (category) {
-        case "blogs":
-            querySearch = `CALL AdvanceSearchBlogs('%${query}%', '${tags.split(" ").join(",")}', '${dateFrom}', '${dateTo}')`;
-            break;
-        case "questions":
-            querySearch = `CALL AdvanceSearchQuestions('%${query}%', '${tags.split(" ").join(",")}', '${dateFrom}', '${dateTo}')`;
-            break;
-        case "announcements":
-            querySearch = `CALL AdvanceSearchAnnouncements('%${query}%', '${tags.split(" ").join(",")}', '${dateFrom}', '${dateTo}')`;
-            break;
-        default:
-            break;
-    }
+    });
+
+    console.log(tagsString)
+
+    querySearch = `
+        SELECT DISTINCT cate.id, cate.title
+        FROM ${category} AS cate, tags_relationships
+        WHERE cate.id = tags_relationships.typeId
+        AND cate.title LIKE '%${query}%'
+        AND cate.created BETWEEN ${dateFrom === "" ? "''" : dateFrom} AND '${dateTo}'
+        AND tags_relationships.type = "${category}"
+        ${
+            tagsString.join(",").length > 2 ?
+            `
+                AND tags_relationships.tagId IN (
+                    SELECT DISTINCT tags.id
+                    FROM ${category} AS cate, tags_relationships, tags
+                    WHERE tags.id = tags_relationships.tagId
+                    AND cate.id = tags_relationships.typeId
+                    AND tags_relationships.type = "${category}"
+                    AND tags.name IN (${tagsString})
+                );
+            `
+            : ""
+        }
+        
+    `
 
     console.log(querySearch)
     
@@ -47,6 +60,6 @@ module.exports.onAdvanceSerach = (req, res) => {
         //     })
         // }
         
-        return res.status(200).json( result[0] )
+        return res.status(200).json( result )
     })
 }

@@ -103,7 +103,7 @@ class AdvanceSearch extends Component {
                                             <a className="hyper-link" target="_blank" href={`/${category}/${d.id}`}>
                                                 {
                                                     // d.title.replace(query, <b>{query}</b>)
-                                                    d.title
+                                                    "- " + d.title
                                                 }
                                             </a>
                                         </h3>
