@@ -19,7 +19,6 @@ module.exports.postAnnouncement = (req, res, next) => {
                 insertedId = [...insertedId, ...data];
             })
         ).then( () => {
-            console.log(insertedId);
             let query = `SELECT AddAnAnnouncementAfterAddTags('${addslashes(title)}', '${addslashes(body)}', ${isImportant}, ${Number(id)}) AS insertedAcmId`;
             con.query(query, (err, acm) => {
                 req.acmId = acm[0].insertedAcmId;

@@ -1,3 +1,4 @@
+
 module.exports.addslashes = (string) => {
     return string.replace(/\\/g, '\\\\').
         replace(/\u0008/g, '\\b').
@@ -9,10 +10,13 @@ module.exports.addslashes = (string) => {
         replace(/"/g, '\\"');
 }
 
+
+
 module.exports.getIdTag = (tag) => {
     return new Promise(resolve => {
         let insertedId = [];
-        con.query(`SELECT CheckAndAddUnExistsTag('${tag}') AS insertedId`, (err, result) => {
+        const { addslashes } = require("./helper");
+        con.query(`SELECT CheckAndAddUnExistsTag('${addslashes(tag)}') AS insertedId`, (err, result) => {
             if(!err) insertedId.push(result[0].insertedId);
             resolve(insertedId);
         })

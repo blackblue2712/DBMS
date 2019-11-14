@@ -4,7 +4,9 @@ let { addslashes } = require("../helper/helper");
 module.exports.onSearchQuestions = (req, res) => {
     let { q } = req.query;
     let query = `SELECT id, title FROM questions WHERE title LIKE '%${addslashes(q)}%' LIMIT 5`;
+    console.log(query)
     con.query(query, (err, questions) => {
+        console.log(questions)
         if(err) return res.status(400).json( {message: "Error occur (search questions)"} );
         return res.status(200).json( questions )
     })
@@ -25,7 +27,7 @@ module.exports.onAdvanceSerach = (req, res) => {
         FROM ${category} AS cate, tags_relationships
         WHERE cate.id = tags_relationships.typeId
         AND cate.title LIKE '%${query}%'
-        AND cate.created BETWEEN ${dateFrom === "" ? "''" : dateFrom} AND '${dateTo}'
+        AND cate.created BETWEEN '${dateFrom === "" ? "''" : dateFrom}' AND '${dateTo}'
         AND tags_relationships.type = "${category}"
         ${
             tagsString.join(",").length > 2 ?

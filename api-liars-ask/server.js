@@ -15,19 +15,19 @@ require('dotenv').config()
 
 // database
 const mysql = require('mysql');
-// con = mysql.createConnection({
-//     host: "127.0.0.1",
-//     user: "root",
-//     password: "",
-//     database: "liars-ask"
-// });
 con = mysql.createConnection({
-    host: "db4free.net",
-    user: "liars_ask123",
-    password: "9Hj6@hq2",
-    database: "liars_ask123",
-    port: 3306
+    host: "127.0.0.1",
+    user: "root",
+    password: "",
+    database: "liars-ask"
 });
+// con = mysql.createConnection({
+//     host: "db4free.net",
+//     user: "liars_ask123",
+//     password: "9Hj6@hq2",
+//     database: "liars_ask123",
+//     port: 3306
+// });
   
 con.connect(function(err) {
     if (err) throw err;
