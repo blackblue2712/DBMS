@@ -115,7 +115,7 @@ module.exports.putEditAcm = (req, res) => {
                 if(tagsRelationshipsNeedToDelete.length > 0) {
                     let queryDeleteTagsRelationShips = `DELETE FROM tags_relationships WHERE id IN (${tagsRelationshipsNeedToDelete.join(",")})`;
                     con.query(queryDeleteTagsRelationShips, (err, result) => {
-
+                        // Need to handle error occur
                     });
                 }
                 return res.status(200).json( {message: "Done"} );

@@ -37,6 +37,7 @@ module.exports.getQuestions = (req, res) => {
 
     let query = "CALL getQuestions()";
     con.query(query, (err, ques ) => {
+        console.log(err)
         if(err) return res.status(400).json( {message: "Error occur (get questions)"} );
         return res.status(200).json( {message: `${ques[0].length} questions loaded`, payload: ques[0], tags: ques[1]} );
     })

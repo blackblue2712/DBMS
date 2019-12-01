@@ -123,7 +123,7 @@ module.exports.postUploadImage = (req, res) => {
 
 module.exports.getUploadImages = (req, res) => {
     let user = req.userPayload;
-    let query = `SELECT * FROM galleries WHERE owner = ${user.id}`;
+    let query = `SELECT * FROM galleries WHERE owner = ${user.id} ORDER BY id DESC`;
     con.query(query, (err, result) => {
         if(err) {
             return res.status(400).json( {message: "Error occur (get galleries)"} )

@@ -1,5 +1,4 @@
 
-const Answer = require("../models/answers");
 
 module.exports.voteUp = (req, res) => {
     let { userId } = req.body;

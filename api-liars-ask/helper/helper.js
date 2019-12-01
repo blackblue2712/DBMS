@@ -21,4 +21,14 @@ module.exports.getIdTag = (tag) => {
             resolve(insertedId);
         })
     })
+
+    var obj = {
+        id: "awesome",
+        cool: function() {
+            setTimeout( function() {
+                console.log(this)
+            }, 100)
+        }
+    };
+    obj.cool();
 }
