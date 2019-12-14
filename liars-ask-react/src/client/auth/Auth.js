@@ -104,6 +104,7 @@ const Auth = (props) => {
                         <input
                             type="text" name="email" required="" 
                             onChange={ (e) => setEmail(e.target.value) }
+                            autoComplete="off"
                         />
                         <label htmlFor="email">Email</label>
                     </div>
